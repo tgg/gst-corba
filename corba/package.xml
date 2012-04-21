@@ -1,0 +1,10 @@
+<package>
+  <name>CORBA</name>
+
+  <filein>CORBA.st</filein>
+
+  <test>
+    <sunit>CORBATest</sunit>
+    <filein>CORBATests.st</filein>
+  </test>
+</package>
