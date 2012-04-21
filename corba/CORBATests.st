@@ -13,4 +13,20 @@ TestCase subclass: CORBATest [
         p value: nil.
         self assert: p value == nil
     ]
+
+    testAsCORBANamedValue [
+        <category: 'tests'>
+        | o n |
+        o := Object new.
+        n := o asCORBANamedValue: 'aName' flags: 2.
+        self assert: n name = 'aName'.
+        n name: nil.
+        self assert: n name isNil.
+        self assert: n value == o.
+        n value: Object new.
+        self assert: (n value == o) not.
+        self assert: n flags == 2.
+        n flags: 0.
+        self assert: n flags = 0
+    ]
 ]
