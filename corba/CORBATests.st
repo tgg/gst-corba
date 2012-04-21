@@ -11,7 +11,8 @@ TestCase subclass: CORBATest [
         self assert: p value == o.
         self assert: p asCORBAParameter == p.
         p value: nil.
-        self assert: p value == nil
+        self assert: p value isNil.
+        self assert: (nil asCORBAParameter) notNil
     ]
 
     testAsCORBANamedValue [
