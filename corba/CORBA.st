@@ -62,7 +62,7 @@ Object extend [
     ]
 ]
 
-Exception subclass: CORBAExceptionEvent [
+Exception subclass: CORBAException [
     corbaHandle: aHandlerBlock do: aBlock [
         ^[aBlock value] on: self class do: [:sig | aHandlerBlock value: sig]
     ]
@@ -70,9 +70,17 @@ Exception subclass: CORBAExceptionEvent [
     corbaRaise [
         self signal
     ]
+
+    corbaRaiseWith: aDictionary [
+        self tag: aDictionary; signal
+    ]
+
+    corbaExceptionValue [
+        ^self tag
+    ]
 ]
 
 Eval [
     Smalltalk at: #CORBAConstants put: Dictionary new.
-    CORBAConstants at: '::CORBA::UNKNOWN' put: CORBAExceptionEvent new
+    CORBAConstants at: '::CORBA::UNKNOWN' put: CORBAException new
 ]

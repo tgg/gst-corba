@@ -35,11 +35,14 @@ TestCase subclass: CORBATest [
         self assert: (CORBAConstants at: '::CORBA::UNKNOWN') notNil
     ]
 
-    testCORBAExceptionEvent [
-        | e |
+    testCORBAException [
+        | e d |
         e := CORBAConstants at: '::CORBA::UNKNOWN'.
         self assert: (e corbaHandle: [:ev | ev] do: [e corbaRaise]) == e.
         self assert: (e corbaHandle: [:ev | ev] do: [nil]) isNil.
-        self assert: (e corbaHandle: [:ev | nil] do: [e corbaRaise]) isNil
+        self assert: (e corbaHandle: [:ev | nil] do: [e corbaRaise]) isNil.
+        d := Dictionary new.
+        d at: #key put: 'value'.
+        self assert: (e corbaHandle: [:ev | ev corbaExceptionValue] do: [e corbaRaiseWith: d]) = d.
     ]
 ]
