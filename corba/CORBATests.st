@@ -30,4 +30,14 @@ TestCase subclass: CORBATest [
         n flags: 0.
         self assert: n flags = 0
     ]
+
+    testCORBASystemException [
+        self assert: (CORBAConstants at: '::CORBA::UNKNOWN') notNil
+    ]
+
+    testCORBAExceptionEvent [
+        | e |
+        e := CORBAConstants at: '::CORBA::UNKNOWN'.
+        self assert: (e corbaHandle: [:ev | ev] do: [e corbaRaise]) == e
+    ]
 ]

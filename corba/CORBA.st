@@ -61,3 +61,18 @@ Object extend [
         ^(CORBANamedValue new) value: self; name: aName; flags: argModeFlags
     ]
 ]
+
+Exception subclass: CORBAExceptionEvent [
+    corbaHandle: aHandlerBlock do: aBlock [
+        ^[aBlock value] on: self class do: [:sig | aHandlerBlock value: sig]
+    ]
+
+    corbaRaise [
+        self signal
+    ]
+]
+
+Eval [
+    Smalltalk at: #CORBAConstants put: Dictionary new.
+    CORBAConstants at: '::CORBA::UNKNOWN' put: CORBAExceptionEvent new
+]
