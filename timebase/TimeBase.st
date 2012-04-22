@@ -12,7 +12,8 @@
  |
  | These classes provide getter and setter messages but *no* validation.
  | The validation of data has to be done before sending it, so that it
- | works also with pure Dictionary instances.
+ | also works with pure Dictionary instances.
+ |
  ======================================================================"
 
 Dictionary subclass: UtcT [
