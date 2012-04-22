@@ -38,6 +38,8 @@ TestCase subclass: CORBATest [
     testCORBAExceptionEvent [
         | e |
         e := CORBAConstants at: '::CORBA::UNKNOWN'.
-        self assert: (e corbaHandle: [:ev | ev] do: [e corbaRaise]) == e
+        self assert: (e corbaHandle: [:ev | ev] do: [e corbaRaise]) == e.
+        self assert: (e corbaHandle: [:ev | ev] do: [nil]) isNil.
+        self assert: (e corbaHandle: [:ev | nil] do: [e corbaRaise]) isNil
     ]
 ]
