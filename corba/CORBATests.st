@@ -44,5 +44,6 @@ TestCase subclass: CORBATest [
         d := Dictionary new.
         d at: #key put: 'value'.
         self assert: (e corbaHandle: [:ev | ev corbaExceptionValue] do: [e corbaRaiseWith: d]) = d.
+        self assert: ((e corbaHandle: [:ev | ev corbaExceptionValue] do: [e corbaRaiseWith: d]) at: #key) = 'value'.
     ]
 ]
