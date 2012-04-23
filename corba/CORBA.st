@@ -68,11 +68,11 @@ Exception subclass: CORBAException [
     ]
 
     corbaRaise [
-        self signal
+        self corbaRaiseWith: Dictionary new
     ]
 
     corbaRaiseWith: aDictionary [
-        self tag: aDictionary; signal
+        (self class new) tag: aDictionary; signal
     ]
 
     corbaExceptionValue [
