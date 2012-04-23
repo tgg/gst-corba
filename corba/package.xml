@@ -1,10 +1,9 @@
 <package>
   <name>CORBA</name>
-
+  <namespace>CORBA</namespace>
   <filein>CORBA.st</filein>
-
   <test>
-    <sunit>CORBATest</sunit>
+    <sunit>CORBA.CORBATest</sunit>
     <filein>CORBATests.st</filein>
   </test>
 </package>

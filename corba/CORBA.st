@@ -20,7 +20,7 @@ Object subclass: CORBAParameter [
 
 Object extend [
     asCORBAParameter [
-        ^(CORBAParameter new) value: self
+        ^(CORBA.CORBAParameter new) value: self
     ]
 ]
 
@@ -58,7 +58,7 @@ Object subclass: CORBANamedValue [
 
 Object extend [
     asCORBANamedValue: aName flags: argModeFlags [
-        ^(CORBANamedValue new) value: self; name: aName; flags: argModeFlags
+        ^(CORBA.CORBANamedValue new) value: self; name: aName; flags: argModeFlags
     ]
 ]
 
@@ -81,6 +81,12 @@ Exception subclass: CORBAException [
 ]
 
 Eval [
+    "Create the dictionary used for:
+       - structs
+       - exceptions
+       - enums"
     Smalltalk at: #CORBAConstants put: Dictionary new.
+
+    "TODO: complete this with all standard exceptions"
     CORBAConstants at: '::CORBA::UNKNOWN' put: CORBAException new
 ]
