@@ -80,6 +80,52 @@ Exception subclass: CORBAException [
     ]
 ]
 
+Object subclass: CORBAEnum [
+    | value |
+
+    <category: 'CORBA'>
+    <comment: nil>
+
+    CORBAEnum class >> values [
+        self subclassResponsibility
+    ]
+
+    CORBAEnum class >> at: aString [
+        | id |
+        id := self values indexOf: aString startingAt: 1.
+        id == 0 ifTrue: [SystemExceptions.NotFound signalOn: aString what: 'key'].
+        ^self new value: id
+    ]
+
+    value: aNumber [
+        value := aNumber
+    ]
+
+    value [
+        ^value
+    ]
+
+    < aCORBAEnum [
+        ^self class == aCORBAEnum class and: [self value < aCORBAEnum value]
+    ]
+
+    <= aCORBAEnum [
+        ^self class == aCORBAEnum class and: [self value <= aCORBAEnum value]
+    ]
+
+    = aCORBAEnum [
+        ^self class == aCORBAEnum class and: [self value = aCORBAEnum value]
+    ]
+
+    > aCORBAEnum [
+        ^self class == aCORBAEnum class and: [self value > aCORBAEnum value]
+    ]
+
+    >= aCORBAEnum [
+        ^self class == aCORBAEnum class and: [self value >= aCORBAEnum value]
+    ]
+]
+
 Eval [
     "Create the dictionary used for:
        - structs

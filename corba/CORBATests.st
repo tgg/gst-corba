@@ -1,3 +1,12 @@
+CORBAEnum subclass: ChartStyle [
+    ChartStyle class >> values [
+        ^#('::Graphics::lineChart'
+           '::Graphics::barChart'
+           '::Graphics::stackedBarChart'
+           '::Graphics::pieChart')
+    ]
+]
+
 TestCase subclass: CORBATest [
 
     <category: 'CORBA-Tests'>
@@ -47,5 +56,18 @@ TestCase subclass: CORBATest [
         self assert: (e corbaHandle: [:ev | ev corbaExceptionValue] do: [e corbaRaiseWith: d]) = d.
         self assert: ((e corbaHandle: [:ev | ev corbaExceptionValue] do: [e corbaRaiseWith: d]) at: #key) = 'value'.
         self assert: (e corbaHandle: [:ev | ev corbaExceptionValue] do: [e corbaRaise]) isEmpty
+    ]
+
+    testCORBAEnum [
+        | v1 v2 v3 |
+        v1 := ChartStyle at: '::Graphics::lineChart'.
+        self assert: v1 value = 1.
+        v2 := ChartStyle at: '::Graphics::pieChart'.
+        self assert: v2 > v1.
+        self assert: v2 >= v1.
+        self assert: v1 < v2.
+        self assert: v1 <= v2.
+        v3 := ChartStyle at: '::Graphics::pieChart'.
+        self assert: v2 = v3.
     ]
 ]
