@@ -17,9 +17,11 @@
  ======================================================================"
 
 Dictionary subclass: UtcT [
+    <shape: #pointer>
+
     UtcT class >> new [
 	<category: 'instance creation'>
-        ^self basicNew
+        ^self from: {#time -> 0 . #inacclo -> 0 . #inacchi -> 0 . #tdf -> 0}
     ]
 
     time: anUnsignedLongLong [
@@ -56,9 +58,11 @@ Dictionary subclass: UtcT [
 ]
 
 Dictionary subclass: IntervalT [
+    <shape: #pointer>
+
     IntervalT class >> new [
 	<category: 'instance creation'>
-        ^self basicNew
+        ^self form: {#lowerBound -> 0 . #upperBound -> 0}
     ]
 
     lowerBound: anUnsignedLongLong [
