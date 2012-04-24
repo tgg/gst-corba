@@ -1,0 +1,8 @@
+<package>
+  <name>DsLogAdmin</name>
+  <namespace>DsLogAdmin</namespace>
+  <prereq>CORBA</prereq>
+  <prereq>TimeBase</prereq>
+
+  <filein>DsLogAdmin.st</filein>
+</package>
