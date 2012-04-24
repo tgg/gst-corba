@@ -2,6 +2,8 @@
   <name>TimeBase</name>
   <namespace>TimeBase</namespace>
   <prereq>CORBA</prereq>
+  <library>libtls_orbit_stubs</library>
 
   <filein>TimeBase.st</filein>
+  <filein>ORBitTimeBase.st</filein>
 </package>
