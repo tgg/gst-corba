@@ -1,4 +1,7 @@
 <package>
   <name>TimeBase</name>
+  <namespace>TimeBase</namespace>
+  <prereq>CORBA</prereq>
+
   <filein>TimeBase.st</filein>
 </package>
