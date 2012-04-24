@@ -6,23 +6,23 @@
 
 Eval [
     "Missing dict"
-    CORBAConstants at: '::DsLogAdmin::InvalidParam' put: CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidThreshold' put: CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidTime' put: CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidTimeInterval' put: CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidMask' put: CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::LogIdAlreadyExists' put: CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidGrammar' put: CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidConstraint' put: CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::InvalidParam' put: CORBA.CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::InvalidThreshold' put: CORBA.CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::InvalidTime' put: CORBA.CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::InvalidTimeInterval' put: CORBA.CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::InvalidMask' put: CORBA.CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::LogIdAlreadyExists' put: CORBA.CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::InvalidGrammar' put: CORBA.CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::InvalidConstraint' put: CORBA.CORBAException new.
     "Missing dict"
-    CORBAConstants at: '::DsLogAdmin::LogFull' put: CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::LogOffDuty' put: CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::LogLocked' put: CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::LogDisabled' put: CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidRecordId' put: CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::LogFull' put: CORBA.CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::LogOffDuty' put: CORBA.CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::LogLocked' put: CORBA.CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::LogDisabled' put: CORBA.CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::InvalidRecordId' put: CORBA.CORBAException new.
     "Missing dict"
-    CORBAConstants at: '::DsLogAdmin::InvalidAttribute' put: CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidLogFullAction' put: CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::InvalidAttribute' put: CORBA.CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::InvalidLogFullAction' put: CORBA.CORBAException new.
 
     CORBAConstants at: '::DsLogAdmin::default_grammar' put: 'EXTENDED_TCL'.
 ]
@@ -229,19 +229,19 @@ Dictionary subclass: WeekMaskItem [
     ]
 ]
 
-CORBAEnum subclass: OperationalState [
+CORBA.CORBAEnum subclass: OperationalState [
     OperationalState class >> values [
         ^#('::DsLogAdmin::disabled' '::DsLogAdmin::enabled')
     ]
 ]
 
-CORBAEnum subclass: AdministrativeState [
+CORBA.CORBAEnum subclass: AdministrativeState [
     AdministrativeState class >> values [
         ^#('::DsLogAdmin::locked' '::DsLogAdmin::unlocked')
     ]
 ]
 
-CORBAEnum subclass: ForwardingState [
+CORBA.CORBAEnum subclass: ForwardingState [
     ForwardingState class >> values [
         ^#('::DsLogAdmin::on' '::DsLogAdmin::off')
     ]
@@ -249,7 +249,7 @@ CORBAEnum subclass: ForwardingState [
 
 Eval [
     "Missing dict"
-    CORBAConstants at: '::DsLogAdmin::UnsupportedQoS' put: CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::UnsupportedQoS' put: CORBA.CORBAException new.
 
     CORBAConstants at: '::DsLogAdmin::QoSNone' put: 0.
     CORBAConstants at: '::DsLogAdmin::QoSFlush' put: 1.
