@@ -50,7 +50,7 @@ CStruct subclass: ORBitIntervalT [
     ]
 
     value [
-        ^(UtcT new)
+        ^(IntervalT new)
             lowerBound: self lowerBound value;
             upperBound: self upperBound value;
             yourself
