@@ -62,7 +62,7 @@ Dictionary subclass: IntervalT [
 
     IntervalT class >> new [
 	<category: 'instance creation'>
-        ^self form: {#lowerBound -> 0 . #upperBound -> 0}
+        ^self from: {#lowerBound -> 0 . #upperBound -> 0}
     ]
 
     lowerBound: anUnsignedLongLong [

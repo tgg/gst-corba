@@ -28,9 +28,11 @@ Eval [
 ]
 
 Dictionary subclass: NVPair [
+    <shape: #pointer>
+
     NVPair class >> new [
 	<category: 'instance creation'>
-        ^self basicNew
+        ^self from: {#name -> nil . #value -> nil}
     ]
 
     name: aString [
@@ -51,9 +53,11 @@ Dictionary subclass: NVPair [
 ]
 
 Dictionary subclass: TimeInterval [
+    <shape: #pointer>
+
     TimeInterval class >> new [
 	<category: 'instance creation'>
-        ^self basicNew
+        ^self from: {#start -> 0 . #stop -> 0}
     ]
 
     start: aTimeT [
@@ -74,9 +78,11 @@ Dictionary subclass: TimeInterval [
 ]
 
 Dictionary subclass: LogRecord [
+    <shape: #pointer>
+
     LogRecord class >> new [
 	<category: 'instance creation'>
-        ^self basicNew
+        ^self from: {#id -> 0 . #time -> 0 . #attrList -> nil . #info -> nil}
     ]
 
     id: anUnsignedLongLong [
@@ -123,9 +129,11 @@ Object subclass: Iterator [
 ]
 
 Dictionary subclass: AvailabilityStatus [
+    <shape: #pointer>
+
     AvailabilityStatus class >> new [
 	<category: 'instance creation'>
-        ^self basicNew
+        ^self from: {#offDuty -> false . #logFull -> false}
     ]
 
     offDuty: aBoolean [
@@ -151,21 +159,23 @@ Eval [
 ]
 
 Dictionary subclass: Time24 [
+    <shape: #pointer>
+
     Time24 class >> new [
 	<category: 'instance creation'>
-        ^self basicNew
+        ^self from: {#hour -> 0 . #minute -> 0}
     ]
 
-    hour: aBoolean [
-        self at: #hour put: aBoolean
+    hour: anUnsignedShort [
+        self at: #hour put: anUnsignedShort
     ]
 
     hour [
         ^self at: #hour
     ]
 
-    minute: aBoolean [
-        self at: #minute put: aBoolean
+    minute: anUnsignedShort [
+        self at: #minute put: anUnsignedShort
     ]
 
     minute [
@@ -174,21 +184,23 @@ Dictionary subclass: Time24 [
 ]
 
 Dictionary subclass: Time24Interval [
+    <shape: #pointer>
+
     Time24Interval class >> new [
 	<category: 'instance creation'>
-        ^self basicNew
+        ^self from: {#start -> nil . #stop -> nil}
     ]
 
-    start: aBoolean [
-        self at: #start put: aBoolean
+    start: aTime24 [
+        self at: #start put: aTime24
     ]
 
     start [
         ^self at: #start
     ]
 
-    stop: aBoolean [
-        self at: #stop put: aBoolean
+    stop: aTime24 [
+        self at: #stop put: aTime24
     ]
 
     stop [
@@ -207,21 +219,23 @@ Eval [
 ]
 
 Dictionary subclass: WeekMaskItem [
+    <shape: #pointer>
+
     WeekMaskItem class >> new [
 	<category: 'instance creation'>
-        ^self basicNew
+        ^self from: {#days -> 0 . #intervals -> nil}
     ]
 
-    days: aBoolean [
-        self at: #days put: aBoolean
+    days: aDaysOfWeek [
+        self at: #days put: aDaysOfWeek
     ]
 
     days [
         ^self at: #days
     ]
 
-    intervals: aBoolean [
-        self at: #intervals put: aBoolean
+    intervals: anIntervalOfDay [
+        self at: #intervals put: anIntervalOfDay
     ]
 
     intervals [
