@@ -1,19 +1,19 @@
 "======================================================================
- |
- | CORBA TimeBase hand-written classes for:
- |  - TimeBase::UtcT
- |  - TimeBase::IntervalT
- |
- | The spec says that an IDL struct is mapped to a Smalltalk Dictionary.
- |
- | So the following classes are not really needed. I think the
- | implementation should be able to cope with any Dictionary provided
- | it has the right keys.
- |
- | These classes provide getter and setter messages but *no* validation.
- | The validation of data has to be done before sending it, so that it
- | also works with pure Dictionary instances.
- |
+|
+| CORBA TimeBase hand-written classes for:
+|  - TimeBase::UtcT
+|  - TimeBase::IntervalT
+|
+| The spec says that an IDL struct is mapped to a Smalltalk Dictionary.
+|
+| So the following classes are not really needed. I think the
+| implementation should be able to cope with any Dictionary provided
+| it has the right keys.
+|
+| These classes provide getter and setter messages but *no* validation.
+| The validation of data has to be done before sending it, so that it
+| also works with pure Dictionary instances.
+|
  ======================================================================"
 
 Dictionary subclass: UtcT [
