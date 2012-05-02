@@ -6,4 +6,9 @@
 
   <filein>TimeBase.st</filein>
   <filein>ORBitTimeBase.st</filein>
+
+  <test>
+    <sunit>TimeBase.TimeBaseTest</sunit>
+    <filein>TimeBaseTests.st</filein>
+  </test>
 </package>
