@@ -17,7 +17,6 @@ Object subclass: CORBAParameter [
     ]
 ]
 
-
 Object extend [
     asCORBAParameter [
         ^(CORBA.CORBAParameter new) value: self
@@ -55,7 +54,6 @@ Object subclass: CORBANamedValue [
     ]
 ]
 
-
 Object extend [
     asCORBANamedValue: aName flags: argModeFlags [
         ^(CORBA.CORBANamedValue new) value: self; name: aName; flags: argModeFlags
