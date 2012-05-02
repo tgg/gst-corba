@@ -7,6 +7,12 @@ CORBAEnum subclass: ChartStyle [
     ]
 ]
 
+Object subclass: TestServant [
+    greet: aString [
+        ^'Hello, ', aString
+    ]
+]
+
 TestCase subclass: CORBATest [
 
     <category: 'CORBA-Tests'>
@@ -69,5 +75,12 @@ TestCase subclass: CORBATest [
         self assert: v1 <= v2.
         v3 := ChartStyle at: '::Graphics::pieChart'.
         self assert: v2 = v3.
+    ]
+
+    testCORBAORB [
+        | s |
+        s := TestServant new.
+        self assert: (CORBAORB objectToString: s) notNil.
+        self assert: (CORBAORB stringToObject: (CORBAORB objectToString: s)) = s
     ]
 ]
