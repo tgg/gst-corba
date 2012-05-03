@@ -126,6 +126,16 @@ Object subclass: CORBAEnum [
     ]
 ]
 
+Object subclass: CORBAORB [
+    CORBAORB class >> stringToObject: aString [
+        self subclassResponsibility
+    ]
+
+    CORBAORB class >> objectToString: aCORBAObject [
+        self subclassResponsibility
+    ]
+]
+
 Eval [
     "Create the dictionary used for:
        - structs
