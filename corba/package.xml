@@ -1,7 +1,11 @@
 <package>
   <name>CORBA</name>
   <namespace>CORBA</namespace>
+  <library>libORBit-2.so</library>
+
   <filein>CORBA.st</filein>
+  <filein>ORBit.st</filein>
+
   <test>
     <sunit>CORBA.CORBATest</sunit>
     <filein>CORBATests.st</filein>
