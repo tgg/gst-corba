@@ -5,9 +5,10 @@ gst-corba
 What it is?
 -----------
 
-*gst-corba* is a pet project to implement [Smalltalk Language
- Mapping][st] using [GNU Smalltalk][gst]
+*gst-corba* is a pet project to implement [CORBA][] [Smalltalk
+ Language Mapping][st] using [GNU Smalltalk][gst]
 
+  [corba]: http://en.wikipedia.org/wiki/Common_Object_Request_Broker_Architecture
   [st]: http://www.omg.org/spec/ST/1.0/PDF
   [gst]: http://smalltalk.gnu.org
 
