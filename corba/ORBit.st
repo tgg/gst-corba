@@ -34,7 +34,7 @@ CStruct subclass: ORBitEnvironment [
     ]
 ]
 
-Object subclass: ORBitORB [
+CORBAORB subclass: ORBitORB [
     | orb environment id |
 
     <category: 'ORBit'>
@@ -81,17 +81,5 @@ Object subclass: ORBitORB [
 
     ORBitORB class >> objectToString: anORB object: aCORBAObject environment: anEnvironment [
         <cCall: 'CORBA_ORB_object_to_string' returning: #string args: #(#cObject #cObject (#ptr #{ORBitEnvironment}))>
-    ]
-]
-
-CORBAORB extend [
-    Singleton := ORBitORB id: 'gst' args: #().
-
-    CORBAORB class >> stringToObject: aString [
-        ^Singleton stringToObject: aString
-    ]
-
-    CORBAORB class >> objectToString: aCORBAObject [
-        ^Singleton objectToString: aCORBAObject
     ]
 ]

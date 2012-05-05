@@ -127,11 +127,11 @@ Object subclass: CORBAEnum [
 ]
 
 Object subclass: CORBAORB [
-    CORBAORB class >> stringToObject: aString [
+    stringToObject: aString [
         self subclassResponsibility
     ]
 
-    CORBAORB class >> objectToString: aCORBAObject [
+    objectToString: aCORBAObject [
         self subclassResponsibility
     ]
 ]
