@@ -32,6 +32,22 @@ CStruct subclass: ORBitEnvironment [
     reset [
         <cCall: 'CORBA_exception_free' returning: #void args: #(#self)>
     ]
+
+    id [
+        <cCall: 'CORBA_exception_id' returning: #string args: #(#self)>
+    ]
+
+    raise [
+        | e |
+        e := CORBAConstants at: (CORBAMapper repoIdToCORBAConstantsKey: self id).
+        "TODO: how can we retrieve exception members here?"
+        self reset.
+        e corbaRaise
+    ]
+
+    ifNoException: aBlock [
+        ^self major value = 0 ifTrue: [aBlock value] ifFalse: [self raise]
+    ]
 ]
 
 CORBAORB subclass: ORBitORB [
@@ -64,7 +80,13 @@ CORBAORB subclass: ORBitORB [
     ]
 
     stringToObject: aString [
-        ^aString ifNotNil: [self class stringToObject: orb string: aString environment: environment] ifNil: [nil]
+        | obj |
+        ^aString
+          ifNotNil: [
+              obj := self class stringToObject: orb string: aString environment: environment.
+              environment ifNoException: [obj]
+          ]
+          ifNil: [nil]
     ]
 
     objectToString: aCORBAObject [

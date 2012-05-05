@@ -9,5 +9,7 @@
   <test>
     <sunit>CORBA.CORBATest</sunit>
     <filein>CORBATests.st</filein>
+    <sunit>CORBA.ORBitTest</sunit>
+    <filein>ORBitTests.st</filein>
   </test>
 </package>

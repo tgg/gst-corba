@@ -136,6 +136,13 @@ Object subclass: CORBAORB [
     ]
 ]
 
+Object subclass: CORBAMapper [
+    CORBAMapper class >> repoIdToCORBAConstantsKey: aString [
+        "TODO: should be simpler without regex"
+        ^(aString replacingAllRegex: 'IDL:[a-z\.]+\/([A-Z_/]+):[0-9.]+' with: '::%1') replacingAllRegex: '/' with: '::'
+    ]
+]
+
 Eval [
     "Create the dictionary used for:
        - structs
@@ -144,5 +151,6 @@ Eval [
     Smalltalk at: #CORBAConstants put: Dictionary new.
 
     "TODO: complete this with all standard exceptions"
-    CORBAConstants at: '::CORBA::UNKNOWN' put: CORBAException new
+    CORBAConstants at: '::CORBA::UNKNOWN' put: CORBAException new.
+    CORBAConstants at: '::CORBA::BAD_PARAM' put: CORBAException new
 ]
