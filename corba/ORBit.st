@@ -64,7 +64,7 @@ CORBAORB subclass: ORBitORB [
     ]
 
     stringToObject: aString [
-        ^self class stringToObject: orb string: aString environment: environment
+        ^aString ifNotNil: [self class stringToObject: orb string: aString environment: environment] ifNil: [nil]
     ]
 
     objectToString: aCORBAObject [
