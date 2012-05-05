@@ -102,10 +102,12 @@ Dictionary subclass: LogRecord [
     ]
 
     attrList: aNVList [
+        "attributes, optional"
         self at: #attrList put: aNVList
     ]
 
     attrList [
+        "attributes, optional"
         ^self at: #attrList
     ]
 
@@ -119,6 +121,8 @@ Dictionary subclass: LogRecord [
 ]
 
 Object subclass: Iterator [
+    <comment: 'Iterator with bulk operation support; returned as a
+result of querying the Log'>
     get: anIndex howMany: aCount [
         self subclassResponsibility
     ]
@@ -167,18 +171,22 @@ Dictionary subclass: Time24 [
     ]
 
     hour: anUnsignedShort [
+        "0-23"
         self at: #hour put: anUnsignedShort
     ]
 
     hour [
+        "0-23"
         ^self at: #hour
     ]
 
     minute: anUnsignedShort [
+        "0-59"
         self at: #minute put: anUnsignedShort
     ]
 
     minute [
+        "0-59"
         ^self at: #minute
     ]
 ]
@@ -250,6 +258,7 @@ CORBA.CORBAEnum subclass: OperationalState [
 ]
 
 CORBA.CORBAEnum subclass: AdministrativeState [
+    <comment: 'logging on/off'>
     AdministrativeState class >> values [
         ^#('::DsLogAdmin::locked' '::DsLogAdmin::unlocked')
     ]
@@ -288,6 +297,7 @@ Object subclass: Log [
     ]
 
     getMaxRecordLife [
+        "life in seconds (0 infinite)"
         self subclassResponsibility
     ]
 
@@ -296,6 +306,7 @@ Object subclass: Log [
     ]
 
     getMaxSize [
+        "size in octets"
         self subclassResponsibility
     ]
 
@@ -303,7 +314,125 @@ Object subclass: Log [
         self subclassResponsibility
     ]
 
-    "..."
+    getCurrentSize [
+        "size in octets"
+        self subclassResponsibility
+    ]
+
+    getNRecords [
+        "number of records"
+        self subclassResponsibility
+    ]
+
+    getLogFullAction [
+        self subclassResponsibility
+    ]
+
+    setLogFullAction: aLogFullAction [
+        self subclassResponsibility
+    ]
+
+    getAdministrativeState [
+        self subclassResponsibility
+    ]
+
+    setAdministrativeState: anAdministrativeState [
+        self subclassResponsibility
+    ]
+
+    getForwardingState [
+        self subclassResponsibility
+    ]
+
+    setForwardingState: aForwardingState [
+        self subclassResponsibility
+    ]
+
+    getOperationalState [
+        self subclassResponsibility
+    ]
+
+    getInterval [
+        "log duration"
+        self subclassResponsibility
+    ]
+
+    setInterval: anInterval [
+        self subclassResponsibility
+    ]
+
+    getAvailabilityStatus [
+        "availability status"
+        self subclassResponsibility
+    ]
+
+    getCapacityAlarmThresholds [
+        "capacity alarm threshold"
+        self subclassResponsibility
+    ]
+
+    setCapacityAlarmThresholds: aCapacityAlarmThresholdList [
+        self subclassResponsibility
+    ]
+
+    getWeekMask [
+        "weekly scheduling"
+        self subclassResponsibility
+    ]
+
+    setWeekMask: aWeekMask [
+        self subclassResponsibility
+    ]
+
+    "Name does not look nice because argument names do not either.
+     Changing the IDL could lead to more readable #query:constraint:iterator"
+    query: aString c: aConstraint i: anIterator [
+        self subclassResponsibility
+    ]
+
+    retrieve: aTimeT howMany: aLong i: anIterator [
+        "negative how_many indicates backwards retrieval"
+        self subclassResponsibility
+    ]
+
+    match: aString c: aConstraint [
+        "returns number of records matching constraint"
+        self subclassResponsibility
+    ]
+
+    deleteRecords: aString c: aConstraint [
+        "returns number of records deleted"
+        self subclassResponsibility
+    ]
+
+    deleteRecordsById: aRecordIdList [
+        self subclassResponsibility
+    ]
+
+    writeRecords: aAnySequence [
+        self subclassResponsibility
+    ]
+
+    writeRecordList: aRecordList [
+        self subclassResponsibility
+    ]
+
+    setRecordAttribute: aRecordId attrList: aNVList [
+        "set single record attributes"
+        self subclassResponsibility
+    ]
+
+    setRecordsAttribute: aString c: aConstraint attrList: aNVList [
+        "set all records that matches the constraints with same attr_list
+returns number of records whose attributes have been set"
+        self subclassResponsibility
+    ]
+
+    getRecordAttribute: aRecordId [
+        "get record attributes"
+        self subclassResponsibility
+    ]
+
     copy: anId [
         self subclassResponsibility
     ]
