@@ -14,4 +14,10 @@ TestCase subclass: ORBitTest [
         ex := CORBA.SystemException.
         self assert: (ex corbaHandle: [:ev | ev] do: [ORB stringToObject: fake]) class == CORBA.BADPARAM
     ]
+
+    testIsA [
+        | obj |
+        obj := ORB stringToObject: IOR.
+        self assert: (obj isA: 'IDL:omg.org/DsLogAdmin/BasicLogFactory:1.0')
+    ]
 ]

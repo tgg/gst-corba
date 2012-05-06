@@ -50,6 +50,25 @@ CStruct subclass: ORBitEnvironment [
     ]
 ]
 
+CObject subclass: ORBitObject [
+    | environment |
+
+    environment [        
+        environment ifNil: [environment := ORBitEnvironment new].
+        ^environment
+    ]
+
+    isA: aString [
+        | r |
+        r := self isA: aString environment: self environment.
+        ^self environment ifNoException: [r ~= $0]
+    ]
+
+    isA: aString environment: anEnvironment [
+        <cCall: 'CORBA_Object_is_a' returning: #uChar args: #(#self #string (#ptr #{ORBitEnvironment}))>
+    ]
+]
+
 CORBAORB subclass: ORBitORB [
     | orb environment id |
 
@@ -98,7 +117,7 @@ CORBAORB subclass: ORBitORB [
     ]
 
     ORBitORB class >> stringToObject: anORB string: aString environment: anEnvironment [
-        <cCall: 'CORBA_ORB_string_to_object' returning: #cObject args: #(#cObject #string (#ptr #{ORBitEnvironment}))>
+        <cCall: 'CORBA_ORB_string_to_object' returning: #{ORBitObject} args: #(#cObject #string (#ptr #{ORBitEnvironment}))>
     ]
 
     ORBitORB class >> objectToString: anORB object: aCORBAObject environment: anEnvironment [
