@@ -56,7 +56,7 @@ CORBAORB subclass: ORBitORB [
     <category: 'ORBit'>
     <comment: nil>
 
-    ORBitORB class >> id: aString args: aStringArray [
+    ORBitORB class >> new: aString withArgs: aStringArray [
         | env argc argv i orb |
         env := ORBitEnvironment new.
         argc := CInt gcValue: aStringArray size + 1.
