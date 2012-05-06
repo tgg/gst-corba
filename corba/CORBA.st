@@ -61,21 +61,55 @@ Object extend [
 ]
 
 Exception subclass: CORBAException [
-    corbaHandle: aHandlerBlock do: aBlock [
-        ^[aBlock value] on: self class do: [:sig | aHandlerBlock value: sig]
+    CORBAException class >> corbaHandle: aHandlerBlock do: aBlock [
+        ^[aBlock value] on: self do: [:sig | aHandlerBlock value: sig]
     ]
 
-    corbaRaise [
+    CORBAException class >> corbaRaise [
         self corbaRaiseWith: Dictionary new
     ]
 
-    corbaRaiseWith: aDictionary [
-        (self class new) tag: aDictionary; signal
+    CORBAException class >> corbaRaiseWith: aDictionary [
+        (self new) tag: aDictionary; signal
     ]
 
     corbaExceptionValue [
         ^self tag
     ]
+]
+
+CORBAException subclass: SystemException [
+    | reason minor completed |
+
+    reason: aString [
+        self tag at: #reason put: aString
+    ]
+
+    reason [
+        ^self tag at: #reason
+    ]
+
+    minor: anInteger [
+        self tag at: #minor put: anInteger
+    ]
+
+    minor [
+        ^self tag at: #minor
+    ]
+
+    completed: aCompletionStatus [
+        self tag at: #completed put: aCompletionStatus
+    ]
+
+    completed [
+        ^self tag at: #completed
+    ]
+]
+
+SystemException subclass: UNKNOWN [
+]
+
+SystemException subclass: BADPARAM [
 ]
 
 "TODO: fix this class so that it does not create a
@@ -151,6 +185,6 @@ Eval [
     Smalltalk at: #CORBAConstants put: Dictionary new.
 
     "TODO: complete this with all standard exceptions"
-    CORBAConstants at: '::CORBA::UNKNOWN' put: CORBAException new.
-    CORBAConstants at: '::CORBA::BAD_PARAM' put: CORBAException new
+    CORBAConstants at: '::CORBA::UNKNOWN' put: UNKNOWN.
+    CORBAConstants at: '::CORBA::BAD_PARAM' put: BADPARAM
 ]

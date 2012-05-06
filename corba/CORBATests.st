@@ -49,7 +49,7 @@ TestCase subclass: CORBATest [
         | e d |
         e := CORBAConstants at: '::CORBA::UNKNOWN'.
         self assert: (e corbaHandle: [:ev | ev] do: [e corbaRaise]) notNil.
-        self assert: (e corbaHandle: [:ev | ev] do: [e corbaRaise]) class == e class.
+        self assert: (e corbaHandle: [:ev | ev] do: [e corbaRaise]) class == e.
         self assert: (e corbaHandle: [:ev | ev] do: [nil]) isNil.
         self assert: (e corbaHandle: [:ev | nil] do: [e corbaRaise]) isNil.
         d := Dictionary new.

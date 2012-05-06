@@ -9,6 +9,8 @@ TestCase subclass: ORBitTest [
         self assert: (orb objectToString: nil) isNil.
         ior := 'dummy-failing-address'.
         ex := CORBAConstants at: '::CORBA::BAD_PARAM'.
-        self assert: (ex corbaHandle: [:ev | ev] do: [orb stringToObject: ior]) class == ex class
+        self assert: (ex corbaHandle: [:ev | ev] do: [orb stringToObject: ior]) class == ex.
+        ex := CORBA.SystemException.
+        self assert: (ex corbaHandle: [:ev | ev] do: [orb stringToObject: ior]) class == CORBA.BADPARAM
     ]
 ]
