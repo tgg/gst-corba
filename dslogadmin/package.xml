@@ -5,4 +5,10 @@
   <prereq>TimeBase</prereq>
 
   <filein>DsLogAdmin.st</filein>
+  <filein>ORBitDsLogAdmin.st</filein>
+
+  <test>
+    <sunit>DsLogAdmin.DsLogAdminTest</sunit>
+    <filein>DsLogAdminTests.st</filein>
+  </test>
 </package>

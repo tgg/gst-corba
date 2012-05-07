@@ -120,7 +120,7 @@ Dictionary subclass: LogRecord [
     ]
 ]
 
-Object subclass: Iterator [
+CORBA.ORBitObject subclass: Iterator [
     <comment: 'Iterator with bulk operation support; returned as a
 result of querying the Log'>
     get: anIndex howMany: aCount [
@@ -279,7 +279,7 @@ Eval [
     CORBAConstants at: '::DsLogAdmin::QoSReliability' put: 2.
 ]
 
-Object subclass: Log [
+CORBA.ORBitObject subclass: Log [
     myFactory [
         self subclassResponsibility
     ]
@@ -452,7 +452,7 @@ Log subclass: BasicLog [
     ]
 ]
 
-Object subclass: LogMgr [
+CORBA.ORBitObject subclass: LogMgr [
     listLogs [
         self subclassResponsibility
     ]

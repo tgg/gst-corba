@@ -143,13 +143,19 @@ The good way to do this should be to use streams."
     ]
 
     stringToObject: aString [
-        | obj |
+        | obj typeId matching |
         ^aString
           ifNotNil: [
               obj := self class stringToObject: orb string: aString environment: environment.
               environment ifNoException: [
-                  obj id: (self class typeId: (self objectToString: obj)).
-                  obj]
+                  typeId := self class typeId: (self objectToString: obj).
+                  obj id: typeId.
+                  matching := ORBitObject selectSubclasses: [
+                      :subclass | (subclass respondsTo: #typeId) and: [subclass typeId = typeId]
+                  ].
+                  "TODO: we avoid problems here."
+                  matching size = 1 ifTrue: [obj castTo: (matching asArray at: 1) type] ifFalse: [obj]
+              ]
           ]
           ifNil: [nil]
     ]
