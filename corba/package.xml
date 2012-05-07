@@ -5,6 +5,9 @@
 
   <filein>CORBA.st</filein>
   <filein>ORBit.st</filein>
+  <!-- TODO: remove this hack when tests prereq filed-in -->
+  <prereq>SUnit</prereq>
+  <filein>ORBitTests.st</filein>
 
   <test>
     <sunit>CORBA.CORBATest</sunit>

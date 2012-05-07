@@ -51,7 +51,7 @@ CStruct subclass: ORBitEnvironment [
 ]
 
 CObject subclass: ORBitObject [
-    | environment |
+    | environment id |
 
     environment [        
         environment ifNil: [environment := ORBitEnvironment new].
@@ -66,6 +66,14 @@ CObject subclass: ORBitObject [
 
     isA: aString environment: anEnvironment [
         <cCall: 'CORBA_Object_is_a' returning: #uChar args: #(#self #string (#ptr #{ORBitEnvironment}))>
+    ]
+
+    id: aString [
+        id := aString
+    ]
+
+    id [
+        ^id
     ]
 ]
 
@@ -86,6 +94,42 @@ CORBAORB subclass: ORBitORB [
         ^self new orb: orb; environment: env; id: aString; yourself
     ]
 
+    "I was not able to find a way to extract the type id from an IOR in ORBit.
+Thus we do it ourselves.
+
+Format is IOR:<BO><PAD><ULEN>[<TYPE_ID...>][<PROFILES...>]
+
+For now, let's be bold and jump to TYPE_ID, up to the first NUL.
+
+The good way to do this should be to use streams."
+    ORBitORB class >> typeId: anIOR [
+        | hexString len char offset str |
+        anIOR ifNil: [
+            SystemExceptions.InvalidArgument signalOn: anIOR reason: 'not allowed'
+        ].
+        (anIOR copyFrom: 1 to: 4) = 'IOR:' ifFalse: [
+            SystemExceptions.InvalidArgument signalOn: anIOR reason: 'does not start with IOR:'
+        ].
+        len := anIOR size.
+        len < 21 ifTrue: [
+            SystemExceptions.InvalidArgument signalOn: anIOR reason: 'length too short'
+        ].
+        offset := 21.
+        str := ''.
+        [offset < len and: [
+            char := self readHexChar: anIOR from: offset.
+            char ~= Character nul]
+        ] whileTrue: [
+            offset := offset + 2.
+            str := str, char asString.
+        ].
+        ^str
+    ]
+
+    ORBitORB class >> readHexChar: aString from: offset [
+        ^(Number readFrom: ((aString copyFrom: offset to: offset + 1) readStream) radix: 16) asCharacter.
+    ]
+
     orb: aCObject [
         orb := aCObject
     ]
@@ -103,7 +147,9 @@ CORBAORB subclass: ORBitORB [
         ^aString
           ifNotNil: [
               obj := self class stringToObject: orb string: aString environment: environment.
-              environment ifNoException: [obj]
+              environment ifNoException: [
+                  obj id: (self class typeId: (self objectToString: obj)).
+                  obj]
           ]
           ifNil: [nil]
     ]
