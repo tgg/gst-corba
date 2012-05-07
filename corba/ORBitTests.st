@@ -27,7 +27,7 @@ TestCase subclass: ORBitTest [
         | obj |
         obj := ORB stringToObject: IOR.
         self assert: (obj isA: 'IDL:omg.org/DsLogAdmin/BasicLogFactory:1.0').
-        "self assert: ([ORBitORB typeId: nil. false] on: SystemExceptions.InvalidArgument do: [true])."
+        self should: [ORBitORB typeId: nil] raise: SystemExceptions.InvalidArgument.
         self assert: obj id = 'IDL:omg.org/DsLogAdmin/BasicLogFactory:1.0'
     ]
 ]
