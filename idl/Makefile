@@ -5,6 +5,7 @@ OBJ   := $(filter-out %.h,$(STUBS:.c=.o))
 LIB   := $(GEN)/libtls_orbit_stubs.so
 
 .PHONY: all clean
+.PRECIOUS: $(STUBS)
 
 all: $(GEN) $(LIB)
 
