@@ -10,18 +10,24 @@ ORBitLog subclass: ORBitBasicLog [
     ]
 ]
 
-BasicLogFactory subclass: ORBitBasicLogFactory [
-    ORBitBasicLogFactory class >> typeId [
-        ^'IDL:omg.org/DsLogAdmin/BasicLogFactory:1.0'
+LogMgr subclass: ORBitLogMgr [
+    ORBitLogMgr class >> typeId [
+        ^'IDL:omg.org/DsLogAdmin/LogMgr:1.0'
     ]
 
     findLog: anId [
-        | obj typeId |
+        | obj |
         obj := self findLog: anId environment: self environment.
         ^self orb bootstrap: obj with: self environment
     ]
 
     findLog: anInt environment: anEnvironment [
         <cCall: 'DsLogAdmin_LogMgr_find_log' returning: #{ORBitLog} args: #(#self #uLong (#ptr #{ORBitEnvironment}))>
+    ]
+]
+
+ORBitLogMgr subclass: ORBitBasicLogFactory [
+    ORBitBasicLogFactory class >> typeId [
+        ^'IDL:omg.org/DsLogAdmin/BasicLogFactory:1.0'
     ]
 ]
