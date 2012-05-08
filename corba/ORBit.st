@@ -45,13 +45,13 @@ CStruct subclass: ORBitEnvironment [
         e corbaRaise
     ]
 
-    ifNoException: aBlock [
+    raiseOrDo: aBlock [
         ^self major value = 0 ifTrue: [aBlock value] ifFalse: [self raise]
     ]
 ]
 
 CObject subclass: ORBitObject [
-    | environment id |
+    | environment id orb |
 
     environment [        
         environment ifNil: [environment := ORBitEnvironment new].
@@ -61,7 +61,7 @@ CObject subclass: ORBitObject [
     isA: aString [
         | r |
         r := self isA: aString environment: self environment.
-        ^self environment ifNoException: [r ~= $0]
+        ^self environment raiseOrDo: [r ~= $0]
     ]
 
     isA: aString environment: anEnvironment [
@@ -74,6 +74,14 @@ CObject subclass: ORBitObject [
 
     id [
         ^id
+    ]
+
+    orb: anORB [
+        orb := anORB
+    ]
+
+    orb [
+        ^orb
     ]
 ]
 
@@ -142,20 +150,30 @@ The good way to do this should be to use streams."
         id := aString
     ]
 
+    id [
+        ^id
+    ]
+
+    bootstrap: aCORBAObject with: anEnvironment [
+        | typeId obj matching |
+        obj := aCORBAObject.
+        ^anEnvironment raiseOrDo: [
+            typeId := self class typeId: (self objectToString: obj).
+            matching := ORBitObject selectSubclasses: [
+                :sub | (sub respondsTo: #typeId) and: [sub typeId = typeId]
+            ].
+            "TODO: we avoid problems here."
+            matching size = 1 ifTrue: [obj := obj castTo: (matching asArray at: 1) type].
+            obj id: typeId; orb: self; yourself
+        ]
+    ]
+
     stringToObject: aString [
         | obj typeId matching |
         ^aString
           ifNotNil: [
               obj := self class stringToObject: orb string: aString environment: environment.
-              environment ifNoException: [
-                  typeId := self class typeId: (self objectToString: obj).
-                  obj id: typeId.
-                  matching := ORBitObject selectSubclasses: [
-                      :subclass | (subclass respondsTo: #typeId) and: [subclass typeId = typeId]
-                  ].
-                  "TODO: we avoid problems here."
-                  matching size = 1 ifTrue: [obj castTo: (matching asArray at: 1) type] ifFalse: [obj]
-              ]
+              self bootstrap: obj with: environment
           ]
           ifNil: [nil]
     ]
