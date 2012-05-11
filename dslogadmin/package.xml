@@ -3,6 +3,7 @@
   <namespace>DsLogAdmin</namespace>
   <prereq>CORBA</prereq>
   <prereq>TimeBase</prereq>
+  <prereq>OSProcess</prereq>
 
   <filein>DsLogAdmin.st</filein>
   <filein>ORBitDsLogAdmin.st</filein>
