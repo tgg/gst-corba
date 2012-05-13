@@ -8,12 +8,12 @@ CStruct subclass: ORBitUtcT [
         <cCall: 'ORBit_small_alloc' returning: #{ORBitUtcT} args: #(#cObject)>
     ]
 
-    ORBitUtcT class >> structAddress [
+    ORBitUtcT class >> typeCodeAddress [
         ^CFunctionDescriptor addressOf: 'TC_TimeBase_UtcT_struct'
     ]
 
     ORBitUtcT class >> from: aUtcT [
-        ^(self new: self structAddress) value: aUtcT
+        ^(self new: self typeCodeAddress) value: aUtcT
     ]
 
     value [
@@ -41,12 +41,12 @@ CStruct subclass: ORBitIntervalT [
         <cCall: 'ORBit_small_alloc' returning: #{ORBitIntervalT} args: #(#cObject)>
     ]
 
-    ORBitIntervalT class >> structAddress [
+    ORBitIntervalT class >> typeCodeAddress [
         ^CFunctionDescriptor addressOf: 'TC_TimeBase_IntervalT_struct'
     ]
 
     ORBitIntervalT class >> from: anIntervalT [
-        ^(self new: self structAddress) value: anIntervalT
+        ^(self new: self typeCodeAddress) value: anIntervalT
     ]
 
     value [
