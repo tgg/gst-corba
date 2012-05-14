@@ -1,8 +1,8 @@
 CStruct subclass: ORBitAny [
     <category: 'ORBit'>
     <comment: nil>
-    <declaration: #( (#type #(#ptr #CObject))
-                     (#value #(#ptr #CObject))
+    <declaration: #( (#type (#ptr #CObject))
+                     (#value (#ptr #CObject))
                      (#release #uChar) )>
 
     ORBitAny class >> new [
@@ -17,7 +17,7 @@ CStruct subclass: ORBitAny [
 CStruct subclass: ORBitEnvironment [
     <category: 'ORBit'>
     <comment: nil>
-    <declaration: #( (#id #(#ptr #char))
+    <declaration: #( (#id (#ptr #char))
                      (#major #uLong)
                      (#any #{ORBitAny}) )>
 
@@ -192,5 +192,72 @@ The good way to do this should be to use streams."
 
     ORBitORB class >> objectToString: anORB object: aCORBAObject environment: anEnvironment [
         <cCall: 'CORBA_ORB_object_to_string' returning: #string args: #(#cObject #cObject (#ptr #{ORBitEnvironment}))>
+    ]
+]
+
+CStruct subclass: ORBitSequence [
+    <category: 'ORBit'>
+    <comment: nil>
+    <declaration: #( (#maximum #uLong)
+                     (#length #uLong)
+                     (#buffer (#ptr #CObject))
+                     (#release #uChar) )>
+
+    | cType |
+
+    ORBitSequence class >> new: anInteger type: aCType [
+        | sequence buffer |
+        sequence := self allocSeq: aCType sequenceTypeCode.
+        sequence length value: anInteger.
+        sequence maximum value: anInteger.
+        "Always free the sequence on #free"
+        sequence release value: $1.
+        buffer := self allocBuf: aCType sequenceTypeCode size: anInteger.
+        sequence buffer value: (buffer castTo: aCType type).
+        sequence cType: aCType type.
+        ^sequence
+    ]
+
+    cType: aCType [
+        cType := aCType
+    ]
+
+    ORBitSequence class >> allocSeq: aTypeCodeAddress [
+        <cCall: 'ORBit_small_alloc' returning: #{ORBitSequence} args: #(#cObject)>
+    ]
+
+    ORBitSequence class >> allocBuf: aTypeCodeAddress size: anInteger [
+        <cCall: 'ORBit_small_allocbuf' returning: #cObject args: #(#cObject #uLong)>
+    ]
+
+    free [
+        <cCall: 'CORBA_free' returning: #void args: #(#self)>
+    ]
+
+    at: anIndex [
+        ^(self buffer value castTo: cType) at: anIndex
+    ]
+
+    at: anIndex put: aValue [
+        (self buffer value castTo: cType) at: anIndex put: aValue
+    ]
+
+    asOrderedCollection [
+        | col len i |
+        len := self length value.
+        col := OrderedCollection new: len.
+        i := 0.
+        [i < len] whileTrue: [ col add: (self at: i). i := i + 1].
+        ^col
+    ]
+]
+
+OrderedCollection extend [
+    asORBitSequenceOf: aSymbolOrCType [
+        | sequence i |
+        sequence := CORBA.ORBitSequence new: self size type: aSymbolOrCType.
+        i := 0.
+        self do: [ :e | sequence at: i put: e. i := i + 1].
+        ^sequence
     ]
 ]

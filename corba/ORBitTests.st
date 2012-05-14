@@ -30,4 +30,23 @@ TestCase subclass: ORBitTest [
         self should: [ORBitORB typeId: nil] raise: SystemExceptions.InvalidArgument.
         self assert: obj id = 'IDL:omg.org/DsLogAdmin/BasicLogFactory:1.0'
     ]
+
+    testCORBASequence [
+        | orbitSeq seq |
+        seq := (OrderedCollection new: 5)
+            add: 2;
+            add: 3;
+            add: 4;
+            add: 5;
+            add: 6;
+            yourself.
+        orbitSeq := seq asORBitSequenceOf: CULongLong.
+        self assert: orbitSeq length value = 5.
+        self assert: (orbitSeq at: 0) = 2.
+        self assert: (orbitSeq at: 1) = 3.
+        self assert: (orbitSeq at: 2) = 4.
+        self assert: (orbitSeq at: 3) = 5.
+        self assert: (orbitSeq at: 4) = 6.
+        self assert: orbitSeq asOrderedCollection = seq.
+    ]
 ]
