@@ -203,7 +203,7 @@ CStruct subclass: ORBitSequence [
                      (#buffer (#ptr #CObject))
                      (#release #uChar) )>
 
-    | cType |
+    | bufferType |
 
     ORBitSequence class >> new: anInteger type: aCType [
         | sequence buffer |
@@ -213,13 +213,14 @@ CStruct subclass: ORBitSequence [
         "Always free the sequence on #free"
         sequence release value: $1.
         buffer := self allocBuf: aCType sequenceTypeCode size: anInteger.
-        sequence buffer value: (buffer castTo: aCType type).
-        sequence cType: aCType type.
+        sequence buffer value: buffer.
+        sequence bufferType: aCType type.
         ^sequence
     ]
 
-    cType: aCType [
-        cType := aCType
+    bufferType: aCType [
+        self buffer value: (self buffer value castTo: aCType).
+        bufferType := aCType
     ]
 
     ORBitSequence class >> allocSeq: aTypeCodeAddress [
@@ -235,11 +236,11 @@ CStruct subclass: ORBitSequence [
     ]
 
     at: anIndex [
-        ^(self buffer value castTo: cType) at: anIndex
+        ^(self buffer value castTo: bufferType) at: anIndex
     ]
 
     at: anIndex put: aValue [
-        (self buffer value castTo: cType) at: anIndex put: aValue
+        (self buffer value castTo: bufferType) at: anIndex put: aValue
     ]
 
     asOrderedCollection [
