@@ -24,6 +24,17 @@ LogMgr subclass: ORBitLogMgr [
     findLog: anInt environment: anEnvironment [
         <cCall: 'DsLogAdmin_LogMgr_find_log' returning: #{ORBitLog} args: #(#self #uLong (#ptr #{ORBitEnvironment}))>
     ]
+
+    listLogsById [
+        | ids |
+        ids := self listLogsById: self environment.
+        ids bufferType: CULongLong type.
+        ^ids asOrderedCollection
+    ]
+
+    listLogsById: anEnvironment [
+        <cCall: 'DsLogAdmin_LogMgr_list_logs_by_id' returning: #{CORBA.ORBitSequence} args: #(#self (#ptr #{ORBitEnvironment}))>
+    ]
 ]
 
 ORBitLogMgr subclass: ORBitBasicLogFactory [
