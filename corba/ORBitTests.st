@@ -42,11 +42,11 @@ TestCase subclass: ORBitTest [
             yourself.
         orbitSeq := seq asORBitSequenceOf: CULongLong.
         self assert: orbitSeq length value = 5.
-        self assert: (orbitSeq at: 0) = 2.
-        self assert: (orbitSeq at: 1) = 3.
-        self assert: (orbitSeq at: 2) = 4.
-        self assert: (orbitSeq at: 3) = 5.
-        self assert: (orbitSeq at: 4) = 6.
+        self assert: (orbitSeq buffer value at: 0) = 2.
+        self assert: (orbitSeq buffer value at: 1) = 3.
+        self assert: (orbitSeq buffer value at: 2) = 4.
+        self assert: (orbitSeq buffer value at: 3) = 5.
+        self assert: (orbitSeq buffer value at: 4) = 6.
         self assert: orbitSeq asOrderedCollection = seq.
     ]
 ]

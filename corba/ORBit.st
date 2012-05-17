@@ -50,7 +50,7 @@ CStruct subclass: ORBitEnvironment [
     ]
 ]
 
-CObject subclass: ORBitObject [
+CPtr subclass: ORBitObject [
     | environment id orb |
 
     environment [        
@@ -168,6 +168,10 @@ The good way to do this should be to use streams."
         ]
     ]
 
+    bootstrap: aCORBAObject [
+        ^self bootstrap: aCORBAObject with: environment
+    ]
+
     stringToObject: aString [
         | obj typeId matching |
         ^aString
@@ -200,27 +204,34 @@ CStruct subclass: ORBitSequence [
     <comment: nil>
     <declaration: #( (#maximum #uLong)
                      (#length #uLong)
-                     (#buffer (#ptr #CObject))
+                     (#buffer (#ptr #{CArray}))
                      (#release #uChar) )>
 
     | bufferType |
 
-    ORBitSequence class >> new: anInteger type: aCType [
+    ORBitSequence class >> new: anInteger type: aCObjectType [
         | sequence buffer |
-        sequence := self allocSeq: aCType sequenceTypeCode.
+        sequence := self allocSeq: aCObjectType sequenceTypeCode.
         sequence length value: anInteger.
         sequence maximum value: anInteger.
         "Always free the sequence on #free"
         sequence release value: $1.
-        buffer := self allocBuf: aCType sequenceTypeCode size: anInteger.
+        buffer := self allocBuf: aCObjectType sequenceTypeCode size: anInteger.
+        sequence bufferType: aCObjectType.
         sequence buffer value: buffer.
-        sequence bufferType: aCType type.
         ^sequence
     ]
 
-    bufferType: aCType [
-        self buffer value: (self buffer value castTo: aCType).
-        bufferType := aCType
+    bufferType: aCObjectType [
+        bufferType := aCObjectType
+    ]
+
+    at: byteOffset type: aType [
+        "We override this because buffer underlying array type is known late.
+         This fixes ORBitSequence>>#buffer using bufferType"
+        ^(bufferType notNil and: [byteOffset = 8])
+            ifFalse: [super at: byteOffset type: aType]
+            ifTrue: [super at: byteOffset type: (CPtrCType elementType: (bufferType type arrayType: self length value))]
     ]
 
     ORBitSequence class >> allocSeq: aTypeCodeAddress [
@@ -235,30 +246,33 @@ CStruct subclass: ORBitSequence [
         <cCall: 'CORBA_free' returning: #void args: #(#self)>
     ]
 
-    at: anIndex [
-        ^(self buffer value castTo: bufferType) at: anIndex
-    ]
-
-    at: anIndex put: aValue [
-        (self buffer value castTo: bufferType) at: anIndex put: aValue
-    ]
-
     asOrderedCollection [
+        ^self asOrderedCollectionDo: [:e | e]
+    ]
+
+    asOrderedCollectionDo: aBlock [
         | col len i |
         len := self length value.
         col := OrderedCollection new: len.
         i := 0.
-        [i < len] whileTrue: [ col add: (self at: i). i := i + 1].
+        [i < len] whileTrue: [ col add: (aBlock value: (self buffer value at: i)). i := i + 1].
         ^col
+    ]
+
+    ORBitSequence class >> from: anORBitSequence type: aCObjectType orb: anORBitORB [
+        anORBitSequence bufferType: aCObjectType.
+        ^(aCObjectType isKindOf: CORBA.ORBitObject)
+            ifFalse: [anORBitSequence asOrderedCollection]
+            ifTrue: [anORBitSequence asOrderedCollectionDo: [:e | anORBitORB bootstrap: e]]
     ]
 ]
 
 OrderedCollection extend [
-    asORBitSequenceOf: aSymbolOrCType [
+    asORBitSequenceOf: aCObjectType [
         | sequence i |
-        sequence := CORBA.ORBitSequence new: self size type: aSymbolOrCType.
+        sequence := CORBA.ORBitSequence new: self size type: aCObjectType.
         i := 0.
-        self do: [ :e | sequence at: i put: e. i := i + 1].
+        self do: [ :e | sequence buffer value at: i put: e. i := i + 1].
         ^sequence
     ]
 ]
