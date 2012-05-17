@@ -50,7 +50,7 @@ CStruct subclass: ORBitEnvironment [
     ]
 ]
 
-CPtr subclass: ORBitObject [
+CObject subclass: ORBitObject [
     | environment id orb |
 
     environment [        
@@ -82,6 +82,14 @@ CPtr subclass: ORBitObject [
 
     orb [
         ^orb
+    ]
+
+    ORBitObject class >> sizeof [
+        ^CPtrSize
+    ]
+
+    value [
+        ^self
     ]
 ]
 
