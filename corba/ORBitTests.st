@@ -48,5 +48,11 @@ TestCase subclass: ORBitTest [
         self assert: (orbitSeq buffer value at: 3) = 5.
         self assert: (orbitSeq buffer value at: 4) = 6.
         self assert: orbitSeq asOrderedCollection = seq.
+        orbitSeq free.
+        seq := OrderedCollection new.
+        orbitSeq := seq asORBitSequenceOf: CULongLong.
+        self assert: orbitSeq length value = 0.
+        self assert: orbitSeq buffer value isNil.
+        orbitSeq free.
     ]
 ]

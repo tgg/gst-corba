@@ -224,9 +224,11 @@ CStruct subclass: ORBitSequence [
         sequence maximum value: anInteger.
         "Always free the sequence on #free"
         sequence release value: $1.
-        buffer := self allocBuf: aCObjectType sequenceTypeCode size: anInteger.
-        sequence bufferType: aCObjectType.
-        sequence buffer value: buffer.
+        anInteger ~= 0 ifTrue: [
+            buffer := self allocBuf: aCObjectType sequenceTypeCode size: anInteger.
+            sequence bufferType: aCObjectType.
+            sequence buffer value: buffer
+        ].
         ^sequence
     ]
 
