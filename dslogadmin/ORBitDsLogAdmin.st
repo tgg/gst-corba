@@ -2,6 +2,14 @@ Log subclass: ORBitLog [
     ORBitLog class >> typeId [
         ^'IDL:omg.org/DsLogAdmin/Log:1.0'
     ]
+
+    id [
+        ^self id: self environment
+    ]
+
+    id: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_id' returning: #uLong args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
 ]
 
 ORBitLog subclass: ORBitBasicLog [
