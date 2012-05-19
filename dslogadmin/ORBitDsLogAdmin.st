@@ -22,7 +22,7 @@ LogMgr subclass: ORBitLogMgr [
     ]
 
     listLogs: anEnvironment [
-        <cCall: 'DsLogAdmin_LogMgr_list_logs' returning: #{CORBA.ORBitSequence} args: #(#self (#ptr #{ORBitEnvironment}))>
+        <cCall: 'DsLogAdmin_LogMgr_list_logs' returning: #{CORBA.ORBitSequence} args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 
     findLog: anId [
@@ -32,7 +32,7 @@ LogMgr subclass: ORBitLogMgr [
     ]
 
     findLog: anInt environment: anEnvironment [
-        <cCall: 'DsLogAdmin_LogMgr_find_log' returning: #{ORBitLog} args: #(#self #uLong (#ptr #{ORBitEnvironment}))>
+        <cCall: 'DsLogAdmin_LogMgr_find_log' returning: #{ORBitLog} args: #(#self #uLong (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 
     listLogsById [
@@ -42,12 +42,36 @@ LogMgr subclass: ORBitLogMgr [
     ]
 
     listLogsById: anEnvironment [
-        <cCall: 'DsLogAdmin_LogMgr_list_logs_by_id' returning: #{CORBA.ORBitSequence} args: #(#self (#ptr #{ORBitEnvironment}))>
+        <cCall: 'DsLogAdmin_LogMgr_list_logs_by_id' returning: #{CORBA.ORBitSequence} args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 ]
 
 ORBitLogMgr subclass: ORBitBasicLogFactory [
     ORBitBasicLogFactory class >> typeId [
         ^'IDL:omg.org/DsLogAdmin/BasicLogFactory:1.0'
+    ]
+
+    create: aFullAction maxSize: aSize id: anId [
+        | obj idPtr corbaObject |
+        idPtr := CULongType gcNew.
+        obj := self create: aFullAction maxSize: aSize id: idPtr environment: self environment.
+        corbaObject := self orb bootstrap: obj with: self environment.
+        "store out values; if an exception was thrown we don't reach that point."
+        anId value: idPtr value.
+        ^corbaObject
+    ]
+
+    create: aFullAction maxSize: aSize id: anId environment: anEnvironment [
+        <cCall: 'DsLogAdmin_BasicLogFactory_create' returning: #{DsLogAdmin.BasicLog} args: #(#self #uShort #uLongLong (#ptr #uLong) (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
+    createWithId: anId fullAction: aFullAction maxSize: aSize [
+        | obj |
+        obj := self createWithId: anId fullAction: aFullAction maxSize: aSize environment: self environment.
+        ^self orb bootstrap: obj with: self environment.
+    ]
+
+    createWithId: anId fullAction: aFullAction maxSize: aSize environment: anEnvironment [
+        <cCall: 'DsLogAdmin_BasicLogFactory_create_with_id' returning: #{DsLogAdmin.BasicLog} args: #(#self #uLong #uShort #uLongLong (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 ]

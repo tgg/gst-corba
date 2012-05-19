@@ -12,13 +12,26 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
 
     tearDown [
         tao sigKill.
-        tao wait.
+        tao wait
     ]
 
-    testBasicLogFactory [
+    testBasicLogFactoryAPI [
         | factory |
         factory := self class stringToObject: ior.
         self assert: (factory isA: 'IDL:omg.org/DsLogAdmin/LogMgr:1.0').
-        self assert: (factory respondsTo: #findLog:)
+        self assert: (factory respondsTo: #findLog:).
+        self assert: (factory respondsTo: #listLogs).
+        self assert: (factory respondsTo: #listLogsById).
+        self assert: (factory respondsTo: #create:maxSize:id:).
+        self assert: (factory respondsTo: #createWithId:fullAction:maxSize:)
+    ]
+
+    testBasicLogFactoryCreate [
+        | factory id log |
+        factory := self class stringToObject: ior.
+        id := nil asCORBAParameter.
+        log := factory create: 0 maxSize: 0 id: id.
+        self assert: id value = 0.
+        self assert: (log isA: 'IDL:omg.org/DsLogAdmin/BasicLog:1.0')
     ]
 ]
