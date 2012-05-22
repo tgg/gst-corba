@@ -271,7 +271,7 @@ CStruct subclass: ORBitSequence [
 
     ORBitSequence class >> from: anORBitSequence type: aCObjectType orb: anORBitORB [
         anORBitSequence bufferType: aCObjectType.
-        ^[(aCObjectType isKindOf: CORBA.ORBitObject)
+        ^[(aCObjectType inheritsFrom: CORBA.ORBitObject)
             ifFalse: [anORBitSequence asOrderedCollection]
             ifTrue: [anORBitSequence asOrderedCollectionDo: [:e | anORBitORB bootstrap: e]]
         ] ensure: [anORBitSequence free]
