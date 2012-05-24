@@ -33,6 +33,7 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         log := factory create: 0 maxSize: 0 id: id.
         self assert: id value = 0.
         self assert: (log isA: 'IDL:omg.org/DsLogAdmin/BasicLog:1.0').
+        self assert: (((factory listLogs) at: 1) id) = 0.
         log := factory createWithId: 1 fullAction: 0 maxSize: 0.
         self assert: log id = 1
     ]

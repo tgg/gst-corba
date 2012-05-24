@@ -236,12 +236,18 @@ CStruct subclass: ORBitSequence [
         bufferType := aCObjectType
     ]
 
+    replacementType [
+        ^(bufferType inheritsFrom: CORBA.ORBitObject)
+            ifTrue: [CPtrCType elementType: ((CPtrCType elementType: bufferType type) arrayType: self length value)]
+            ifFalse: [CPtrCType elementType: (bufferType type arrayType: self length value)]
+    ]
+
     at: byteOffset type: aType [
         "We override this because buffer underlying array type is known late.
          This fixes ORBitSequence>>#buffer using bufferType"
         ^(bufferType notNil and: [byteOffset = 8])
             ifFalse: [super at: byteOffset type: aType]
-            ifTrue: [super at: byteOffset type: (CPtrCType elementType: (bufferType type arrayType: self length value))]
+            ifTrue: [super at: byteOffset type: self replacementType]
     ]
 
     ORBitSequence class >> allocSeq: aTypeCodeAddress [
