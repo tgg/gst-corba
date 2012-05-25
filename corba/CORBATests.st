@@ -73,6 +73,8 @@ TestCase subclass: CORBATest [
     ]
 
     testNameMapping [
-        self assert: (CORBAMapper repoIdToCORBAConstantsKey: 'IDL:omg.org/CORBA/BAD_PARAM:1.0') = '::CORBA::BAD_PARAM'
+        self assert: (CORBAMapper repoIdToCORBAConstantsKey: 'IDL:omg.org/CORBA/BAD_PARAM:1.0') = '::CORBA::BAD_PARAM'.
+        self assert: (CORBAMapper repoIdToCORBAConstantsKey: 'IDL:omg.org/DsLogAdmin/LogIdAlreadyExists:1.0') = '::DsLogAdmin::LogIdAlreadyExists'.
+        self should: [CORBAMapper repoIdToCORBAConstantsKey: 'invalid repo id'] raise: SystemExceptions.InvalidArgument
     ]
 ]

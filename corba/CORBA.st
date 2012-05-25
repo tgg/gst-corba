@@ -173,8 +173,20 @@ Object subclass: CORBAORB [
 
 Object subclass: CORBAMapper [
     CORBAMapper class >> repoIdToCORBAConstantsKey: aString [
-        "TODO: should be simpler without regex"
-        ^(aString replacingAllRegex: 'IDL:[a-z\.]+\/([A-Z_/]+):[0-9.]+' with: '::%1') replacingAllRegex: '/' with: '::'
+        | stream prefix key next |
+        stream := aString readStream.
+        prefix := stream next: 4. "IDL:"
+        prefix = 'IDL:' ifFalse: [SystemExceptions.InvalidArgument signalOn: aString reason: 'missing prefix'].
+        key := WriteStream on: (String new: aString size - 4).
+        key nextPutAll: '::'.
+        stream skipTo: $/.
+        [stream atEnd or: [(next := stream next) == $:]]
+            whileFalse: [
+                next == $/
+                    ifFalse: [key nextPut: next]
+                    ifTrue: [key nextPutAll: '::']
+            ].
+        ^key contents
     ]
 ]
 
