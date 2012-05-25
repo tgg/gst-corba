@@ -4,25 +4,96 @@
 |
  ======================================================================"
 
+CORBA.UserException subclass: InvalidParam [
+    details [
+        ^self tag at: #details
+    ]
+
+    details: aString [
+        self tag at: #details put: aString
+    ]
+]
+
+CORBA.UserException subclass: InvalidThreshold [
+]
+
+CORBA.UserException subclass: InvalidTime [
+]
+
+CORBA.UserException subclass: InvalidTimeInterval [
+]
+
+CORBA.UserException subclass: InvalidMask [
+]
+
+CORBA.UserException subclass: LogIdAlreadyExists [
+]
+
+CORBA.UserException subclass: InvalidGrammar [
+]
+
+CORBA.UserException subclass: InvalidConstraint [
+]
+
+CORBA.UserException subclass: LogFull [
+    nRecordsWritten [
+        ^self tag at: #nRecordsWritten
+    ]
+
+    nRecordsWritten: aShort [
+        self tag at: #nRecordsWritten put: aShort
+    ]
+]
+
+CORBA.UserException subclass: LogOffDuty [
+]
+
+CORBA.UserException subclass: LogLocked [
+]
+
+CORBA.UserException subclass: LogDisabled [
+]
+
+CORBA.UserException subclass: InvalidRecordId [
+]
+
+CORBA.UserException subclass: InvalidAttribute [
+    attrName [
+        ^self tag at: #attrName
+    ]
+
+    attrName: aString [
+        self tag at: #attrName put: aString
+    ]
+
+    value [
+        ^self tag at: #value
+    ]
+
+    value: anAny [
+        self at: #value put: anAny
+    ]
+]
+
+CORBA.UserException subclass: InvalidLogFullAction [
+]
+
 Eval [
-    "Missing dict"
-    CORBAConstants at: '::DsLogAdmin::InvalidParam' put: CORBA.CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidThreshold' put: CORBA.CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidTime' put: CORBA.CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidTimeInterval' put: CORBA.CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidMask' put: CORBA.CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::LogIdAlreadyExists' put: CORBA.CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidGrammar' put: CORBA.CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidConstraint' put: CORBA.CORBAException new.
-    "Missing dict"
-    CORBAConstants at: '::DsLogAdmin::LogFull' put: CORBA.CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::LogOffDuty' put: CORBA.CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::LogLocked' put: CORBA.CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::LogDisabled' put: CORBA.CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidRecordId' put: CORBA.CORBAException new.
-    "Missing dict"
-    CORBAConstants at: '::DsLogAdmin::InvalidAttribute' put: CORBA.CORBAException new.
-    CORBAConstants at: '::DsLogAdmin::InvalidLogFullAction' put: CORBA.CORBAException new.
+    CORBAConstants at: '::DsLogAdmin::InvalidParam' put: InvalidParam.
+    CORBAConstants at: '::DsLogAdmin::InvalidThreshold' put: InvalidThreshold.
+    CORBAConstants at: '::DsLogAdmin::InvalidTime' put: InvalidTime.
+    CORBAConstants at: '::DsLogAdmin::InvalidTimeInterval' put: InvalidTimeInterval.
+    CORBAConstants at: '::DsLogAdmin::InvalidMask' put: InvalidMask.
+    CORBAConstants at: '::DsLogAdmin::LogIdAlreadyExists' put: LogIdAlreadyExists.
+    CORBAConstants at: '::DsLogAdmin::InvalidGrammar' put: InvalidGrammar.
+    CORBAConstants at: '::DsLogAdmin::InvalidConstraint' put: InvalidConstraint.
+    CORBAConstants at: '::DsLogAdmin::LogFull' put: LogFull.
+    CORBAConstants at: '::DsLogAdmin::LogOffDuty' put: LogOffDuty.
+    CORBAConstants at: '::DsLogAdmin::LogLocked' put: LogLocked.
+    CORBAConstants at: '::DsLogAdmin::LogDisabled' put: LogDisabled.
+    CORBAConstants at: '::DsLogAdmin::InvalidRecordId' put: InvalidRecordId.
+    CORBAConstants at: '::DsLogAdmin::InvalidAttribute' put: InvalidAttribute.
+    CORBAConstants at: '::DsLogAdmin::InvalidLogFullAction' put: InvalidLogFullAction.
 
     CORBAConstants at: '::DsLogAdmin::default_grammar' put: 'EXTENDED_TCL'.
 ]

@@ -27,7 +27,7 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
     ]
 
     testBasicLogFactoryCreate [
-        | factory id log |
+        | factory id log e |
         factory := self class stringToObject: ior.
         id := nil asCORBAParameter.
         log := factory create: 0 maxSize: 0 id: id.
@@ -36,6 +36,8 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         self assert: (((factory listLogs) at: 1) id) = 0.
         self assert: ((factory listLogsById) at: 1) = 0.
         log := factory createWithId: 1 fullAction: 0 maxSize: 0.
-        self assert: log id = 1
+        self assert: log id = 1.
+        (CORBAConstants at: '::DsLogAdmin::LogIdAlreadyExists') corbaHandle: [:ev | e := ev] do: [factory createWithId: 1 fullAction: 0 maxSize: 0].
+        self assert: e notNil.
     ]
 ]
