@@ -79,8 +79,6 @@ Exception subclass: CORBAException [
 ]
 
 CORBAException subclass: SystemException [
-    | reason minor completed |
-
     reason: aString [
         self tag at: #reason put: aString
     ]
@@ -110,6 +108,9 @@ SystemException subclass: UNKNOWN [
 ]
 
 SystemException subclass: BADPARAM [
+]
+
+CORBAException subclass: UserException [
 ]
 
 "TODO: fix this class so that it does not create a
