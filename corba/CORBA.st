@@ -147,6 +147,12 @@ Object subclass: CORBAEnum [
         ^values at: id
     ]
 
+    CORBAEnum class >> atIndex: anIndex [
+        (anIndex > self values size) ifTrue: [BADPARAM corbaRaise].
+        self initialize.
+        ^values at: anIndex
+    ]
+
     index: aNumber [
         index := aNumber
     ]
