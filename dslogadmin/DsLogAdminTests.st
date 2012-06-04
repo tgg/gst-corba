@@ -40,4 +40,40 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         (CORBAConstants at: '::DsLogAdmin::LogIdAlreadyExists') corbaHandle: [:ev | e := ev] do: [factory createWithId: 1 fullAction: 0 maxSize: 0].
         self assert: e notNil.
     ]
+
+    testLogAPI [
+        | factory log |
+        factory := self class stringToObject: ior.
+        log := factory create: 0 maxSize: 0 id: (nil asCORBAParameter).
+        self assert: (log respondsTo: #myFactory).
+        self assert: (log respondsTo: #id).
+        self assert: (log respondsTo: #getLogQos).
+        self assert: (log respondsTo: #setLogQos:).
+        self assert: (log respondsTo: #getMaxRecordLife).
+        self assert: (log respondsTo: #setMaxRecordLife:).
+        self assert: (log respondsTo: #getMaxSize).
+        self assert: (log respondsTo: #setMaxSize:).
+        self assert: (log respondsTo: #getCurrentSize).
+        self assert: (log respondsTo: #getNRecords).
+    ]
+
+    testLog [
+        | factory log |
+        factory := self class stringToObject: ior.
+        log := factory create: 0 maxSize: 0 id: (nil asCORBAParameter).
+        self assert: log myFactory notNil.
+        self assert: log id = 0.
+        self assert: log getLogQos = #(0) asOrderedCollection.
+        "self assert: log setLogQos: "
+        log setMaxRecordLife: 15.
+        self assert: log getMaxRecordLife = 15.
+        log setMaxSize: 10.
+        self assert: log getMaxSize = 10.
+        self assert: log getCurrentSize = 0.
+        self assert: log getNRecords = 0.
+        log setLogFullAction: (CORBAConstants at: '::DsLogAdmin::halt').
+        self assert: log getLogFullAction = (CORBAConstants at: '::DsLogAdmin::halt').
+        log setAdministrativeState: (AdministrativeState at: '::DsLogAdmin::locked').
+        self assert: log getAdministrativeState = (AdministrativeState at: '::DsLogAdmin::locked')
+    ]
 ]
