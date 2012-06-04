@@ -69,7 +69,7 @@ TestCase subclass: CORBATest [
         self assert: v1 < v2.
         self assert: v1 <= v2.
         v3 := ChartStyle at: '::Graphics::pieChart'.
-        self assert: v2 = v3.
+        self assert: v2 == v3.
     ]
 
     testNameMapping [
