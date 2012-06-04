@@ -113,8 +113,6 @@ SystemException subclass: BADPARAM [
 CORBAException subclass: UserException [
 ]
 
-"TODO: fix this class so that it does not create a
- new object for every valid #at: invocation"
 Object subclass: CORBAEnum [
     | index |
 
