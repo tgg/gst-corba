@@ -116,7 +116,7 @@ CORBAException subclass: UserException [
 "TODO: fix this class so that it does not create a
  new object for every valid #at: invocation"
 Object subclass: CORBAEnum [
-    | value |
+    | index |
 
     <category: 'CORBA'>
     <comment: nil>
@@ -127,37 +127,37 @@ Object subclass: CORBAEnum [
 
     CORBAEnum class >> at: aString [
         | id |
-        id := self values indexOf: aString startingAt: 1.
+        id := self values indexOf: aString.
         id == 0 ifTrue: [SystemExceptions.NotFound signalOn: aString what: 'key'].
-        ^self new value: id
+        ^self new index: id
     ]
 
-    value: aNumber [
-        value := aNumber
+    index: aNumber [
+        index := aNumber
     ]
 
-    value [
-        ^value
+    index [
+        ^index
     ]
 
     < aCORBAEnum [
-        ^self class == aCORBAEnum class and: [self value < aCORBAEnum value]
+        ^self class == aCORBAEnum class and: [self index < aCORBAEnum index]
     ]
 
     <= aCORBAEnum [
-        ^self class == aCORBAEnum class and: [self value <= aCORBAEnum value]
+        ^self class == aCORBAEnum class and: [self index <= aCORBAEnum index]
     ]
 
     = aCORBAEnum [
-        ^self class == aCORBAEnum class and: [self value = aCORBAEnum value]
+        ^self class == aCORBAEnum class and: [self index = aCORBAEnum index]
     ]
 
     > aCORBAEnum [
-        ^self class == aCORBAEnum class and: [self value > aCORBAEnum value]
+        ^self class == aCORBAEnum class and: [self index > aCORBAEnum index]
     ]
 
     >= aCORBAEnum [
-        ^self class == aCORBAEnum class and: [self value >= aCORBAEnum value]
+        ^self class == aCORBAEnum class and: [self index >= aCORBAEnum index]
     ]
 ]
 

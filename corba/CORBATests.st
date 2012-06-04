@@ -62,7 +62,7 @@ TestCase subclass: CORBATest [
     testCORBAEnum [
         | v1 v2 v3 |
         v1 := ChartStyle at: '::Graphics::lineChart'.
-        self assert: v1 value = 1.
+        self assert: v1 index = 1.
         v2 := ChartStyle at: '::Graphics::pieChart'.
         self assert: v2 > v1.
         self assert: v2 >= v1.
