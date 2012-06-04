@@ -121,15 +121,30 @@ Object subclass: CORBAEnum [
     <category: 'CORBA'>
     <comment: nil>
 
+    CORBAEnum class [
+        | values |
+    ]
+
     CORBAEnum class >> values [
         self subclassResponsibility
+    ]
+
+    CORBAEnum class >> initialize [
+        "lazy creation of our values"
+        | allValues |
+        values ifNil: [
+            allValues := self values.
+            values := OrderedCollection new: allValues size.
+            allValues doWithIndex: [:each :i| values add: (CORBAEnum new index: i)]
+        ]
     ]
 
     CORBAEnum class >> at: aString [
         | id |
         id := self values indexOf: aString.
         id == 0 ifTrue: [SystemExceptions.NotFound signalOn: aString what: 'key'].
-        ^self new index: id
+        self initialize.
+        ^values at: id
     ]
 
     index: aNumber [
