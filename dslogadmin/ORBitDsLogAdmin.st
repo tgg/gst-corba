@@ -116,6 +116,30 @@ Log subclass: ORBitLog [
     setAdministrativeState: anAdministrativeState environment: anEnvironment [
         <cCall: 'DsLogAdmin_Log_set_administrative_state' returning: #void args: #(#self #long (#ptr #{CORBA.ORBitEnvironment}))>
     ]
+
+    getForwardingState [
+        ^ForwardingState at: (self getForwardingState: self environment) + 1
+    ]
+
+    getForwardingState: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_get_forwarding_state' returning: #long args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
+    setForwardingState: aForwardingState [
+        self setForwardingState: aForwardingState index - 1 environment: self environment
+    ]
+
+    setForwardingState: aForwardingState environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_set_forwarding_state' returning: #void args: #(#self #long (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
+    getOperationalState [
+        ^OperationalState at: (self getOperationalState: self environment) + 1
+    ]
+
+    getOperationalState: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_get_operational_state' returning: #long args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
 ]
 
 ORBitLog subclass: ORBitBasicLog [

@@ -63,8 +63,8 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         log := factory create: 0 maxSize: 0 id: (nil asCORBAParameter).
         self assert: log myFactory notNil.
         self assert: log id = 0.
-        self assert: log getLogQos = #(0) asOrderedCollection.
-        "self assert: log setLogQos: "
+        log setLogQos: (OrderedCollection with: (CORBAConstants at: '::DsLogAdmin::QoSFlush')).
+        self assert: log getLogQos = (OrderedCollection with: (CORBAConstants at: '::DsLogAdmin::QoSFlush')).
         log setMaxRecordLife: 15.
         self assert: log getMaxRecordLife = 15.
         log setMaxSize: 10.
@@ -75,7 +75,8 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         self assert: log getLogFullAction = (CORBAConstants at: '::DsLogAdmin::halt').
         log setAdministrativeState: (CORBAConstants at: '::DsLogAdmin::locked').
         self assert: log getAdministrativeState = (CORBAConstants at: '::DsLogAdmin::locked').
-        log setForwardingState: (CORBAConstants at: '::DsLogAdmin::off').
-        self assert: log getForwardingState = (CORBAConstants at: '::DsLogAdmin::off').
+        log setForwardingState: (CORBAConstants at: '::DsLogAdmin::on').
+        self assert: log getForwardingState = (CORBAConstants at: '::DsLogAdmin::on').
+        self assert: log getOperationalState = (CORBAConstants at: '::DsLogAdmin::enabled').
     ]
 ]

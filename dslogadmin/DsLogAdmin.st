@@ -353,13 +353,21 @@ Eval [
     ForwardingState initialize
 ]
 
-Eval [
-    "Missing dict"
-    CORBAConstants at: '::DsLogAdmin::UnsupportedQoS' put: CORBA.CORBAException new.
+CORBA.UserException subclass: UnsupportedQoS [
+    denied [
+        ^self tag at: #denied
+    ]
 
+    denied: aQoSList [
+        self tag at: #denied put: aQoSList
+    ]
+]
+
+Eval [
+    CORBAConstants at: '::DsLogAdmin::UnsupportedQoS' put: UnsupportedQoS.
     CORBAConstants at: '::DsLogAdmin::QoSNone' put: 0.
     CORBAConstants at: '::DsLogAdmin::QoSFlush' put: 1.
-    CORBAConstants at: '::DsLogAdmin::QoSReliability' put: 2.
+    CORBAConstants at: '::DsLogAdmin::QoSReliability' put: 2
 ]
 
 CORBA.ORBitObject subclass: Log [
