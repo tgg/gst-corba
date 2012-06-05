@@ -128,26 +128,20 @@ Object subclass: CORBAEnum [
     ]
 
     CORBAEnum class >> initialize [
-        "lazy creation of our values"
-        | allValues |
+        | allValues enum |
         values ifNil: [
             allValues := self values.
             values := OrderedCollection new: allValues size.
-            allValues doWithIndex: [:each :i| values add: (CORBAEnum new index: i)]
+            allValues doWithIndex: [:each :i |
+                enum := CORBAEnum new index: i.
+                CORBAConstants at: each put: enum.
+                values add: enum
+            ]
         ]
     ]
 
-    CORBAEnum class >> at: aString [
-        | id |
-        id := self values indexOf: aString.
-        id == 0 ifTrue: [SystemExceptions.NotFound signalOn: aString what: 'key'].
-        self initialize.
-        ^values at: id
-    ]
-
-    CORBAEnum class >> atIndex: anIndex [
+    CORBAEnum class >> at: anIndex [
         (anIndex > self values size) ifTrue: [BADPARAM corbaRaise].
-        self initialize.
         ^values at: anIndex
     ]
 
