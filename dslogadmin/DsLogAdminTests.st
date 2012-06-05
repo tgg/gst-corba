@@ -73,7 +73,9 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         self assert: log getNRecords = 0.
         log setLogFullAction: (CORBAConstants at: '::DsLogAdmin::halt').
         self assert: log getLogFullAction = (CORBAConstants at: '::DsLogAdmin::halt').
-        log setAdministrativeState: (AdministrativeState at: '::DsLogAdmin::locked').
-        self assert: log getAdministrativeState = (AdministrativeState at: '::DsLogAdmin::locked')
+        log setAdministrativeState: (CORBAConstants at: '::DsLogAdmin::locked').
+        self assert: log getAdministrativeState = (CORBAConstants at: '::DsLogAdmin::locked').
+        log setForwardingState: (CORBAConstants at: '::DsLogAdmin::off').
+        self assert: log getForwardingState = (CORBAConstants at: '::DsLogAdmin::off').
     ]
 ]

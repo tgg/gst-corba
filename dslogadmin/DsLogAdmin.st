@@ -328,6 +328,10 @@ CORBA.CORBAEnum subclass: OperationalState [
     ]
 ]
 
+Eval [
+    OperationalState initialize
+]
+
 CORBA.CORBAEnum subclass: AdministrativeState [
     <comment: 'logging on/off'>
     AdministrativeState class >> values [
@@ -335,10 +339,18 @@ CORBA.CORBAEnum subclass: AdministrativeState [
     ]
 ]
 
+Eval [
+    AdministrativeState initialize
+]
+
 CORBA.CORBAEnum subclass: ForwardingState [
     ForwardingState class >> values [
         ^#('::DsLogAdmin::on' '::DsLogAdmin::off')
     ]
+]
+
+Eval [
+    ForwardingState initialize
 ]
 
 Eval [

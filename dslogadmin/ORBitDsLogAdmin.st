@@ -102,7 +102,7 @@ Log subclass: ORBitLog [
     ]
 
     getAdministrativeState [
-        ^AdministrativeState atIndex: (self getAdministrativeState: self environment) + 1
+        ^AdministrativeState at: (self getAdministrativeState: self environment) + 1
     ]
 
     getAdministrativeState: anEnvironment [
