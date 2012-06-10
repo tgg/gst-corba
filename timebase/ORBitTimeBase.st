@@ -17,10 +17,10 @@ CStruct subclass: ORBitUtcT [
     ]
 
     ORBitUtcT class >> from: aUtcT [
-        ^(self new) value: aUtcT
+        ^(self new) with: aUtcT
     ]
 
-    value [
+    asUtcT [
         ^(UtcT new)
             time: self time value;
             inacclo: self inacclo value;
@@ -29,7 +29,7 @@ CStruct subclass: ORBitUtcT [
             yourself
     ]
 
-    value: aUtcT [
+    with: aUtcT [
         self time value: (aUtcT at: #time).
         self inacclo value: (aUtcT at: #inacclo).
         self inacchi value: (aUtcT at: #inacchi).
@@ -54,17 +54,17 @@ CStruct subclass: ORBitIntervalT [
     ]
 
     ORBitIntervalT class >> from: anIntervalT [
-        ^(self new) value: anIntervalT
+        ^(self new) with: anIntervalT
     ]
 
-    value [
+    asIntervalT [
         ^(IntervalT new)
             lowerBound: self lowerBound value;
             upperBound: self upperBound value;
             yourself
     ]
 
-    value: anIntervalT [
+    with: anIntervalT [
         self lowerBound value: (anIntervalT at: #lowerBound).
         self upperBound value: (anIntervalT at: #upperBound)
     ]
