@@ -55,28 +55,40 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         self assert: (log respondsTo: #setMaxSize:).
         self assert: (log respondsTo: #getCurrentSize).
         self assert: (log respondsTo: #getNRecords).
+        self assert: (log respondsTo: #getLogFullAction).
+        self assert: (log respondsTo: #setLogFullAction:).
     ]
 
     testLog [
-        | factory log |
+        | factory log qos halt locked on interval |
         factory := self class stringToObject: ior.
         log := factory create: 0 maxSize: 0 id: (nil asCORBAParameter).
         self assert: log myFactory notNil.
         self assert: log id = 0.
-        log setLogQos: (OrderedCollection with: (CORBAConstants at: '::DsLogAdmin::QoSFlush')).
-        self assert: log getLogQos = (OrderedCollection with: (CORBAConstants at: '::DsLogAdmin::QoSFlush')).
+        qos := CORBAConstants at: '::DsLogAdmin::QoSFlush'.
+        log setLogQos: (OrderedCollection with: qos).
+        self assert: log getLogQos = (OrderedCollection with: qos).
         log setMaxRecordLife: 15.
         self assert: log getMaxRecordLife = 15.
         log setMaxSize: 10.
         self assert: log getMaxSize = 10.
         self assert: log getCurrentSize = 0.
         self assert: log getNRecords = 0.
-        log setLogFullAction: (CORBAConstants at: '::DsLogAdmin::halt').
-        self assert: log getLogFullAction = (CORBAConstants at: '::DsLogAdmin::halt').
-        log setAdministrativeState: (CORBAConstants at: '::DsLogAdmin::locked').
-        self assert: log getAdministrativeState = (CORBAConstants at: '::DsLogAdmin::locked').
-        log setForwardingState: (CORBAConstants at: '::DsLogAdmin::on').
-        self assert: log getForwardingState = (CORBAConstants at: '::DsLogAdmin::on').
+        halt := CORBAConstants at: '::DsLogAdmin::halt'.
+        log setLogFullAction: halt.
+        self assert: log getLogFullAction = halt.
+        locked := CORBAConstants at: '::DsLogAdmin::locked'.
+        log setAdministrativeState: locked.
+        self assert: log getAdministrativeState = locked.
+        on := CORBAConstants at: '::DsLogAdmin::on'.
+        log setForwardingState: on.
+        self assert: log getForwardingState = on.
         self assert: log getOperationalState = (CORBAConstants at: '::DsLogAdmin::enabled').
+        interval := (TimeInterval new) stop: 15; yourself.
+        log setInterval: interval.
+        "self assert: log getInterval = interval" "Broken for now"
+        log setCapacityAlarmThresholds:  #(50 75) asOrderedCollection.
+        self assert: log getCapacityAlarmThresholds = #(50 75) asOrderedCollection.
+        "self assert: log getAvailabilityStatus = AvailabilityStatus new" "Broken for now"
     ]
 ]
