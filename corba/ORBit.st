@@ -1,12 +1,48 @@
+CStruct subclass: ORBitRootObject [
+    <category: 'ORBit'>
+    <comment: nil>
+    <declaration: #( (#interface (#ptr #CObject))
+                     (#ref #long) )>
+]
+
+CStruct subclass: ORBitTypeCode [
+    <category: 'ORBit'>
+    <comment: nil>
+    <declaration: #( (#parent #{ORBitRootObject})
+                     (#kind #uLong)
+                     (#flags #uLong)
+                     (#cLength #short)
+                     (#cAlign #short)
+                     (#length #uLong)
+                     (#subParts #uLong)
+                     (#subTypes (#ptr (#ptr #{ORBitTypeCode})))
+                     (#discriminator (#ptr #{ORBitTypeCode}))
+                     (#name #string)
+                     (#repoId #string)
+                     (#subNames (#ptr #string))
+                     (#subLabels (#ptr #long))
+                     (#defaultIndex #long)
+                     (#recurseDepth #uLong)
+                     (#digits #uShort)
+                     (#scale #short) )>
+]
+
 CStruct subclass: ORBitAny [
     <category: 'ORBit'>
     <comment: nil>
-    <declaration: #( (#type (#ptr #CObject))
-                     (#value (#ptr #CObject))
+    <declaration: #( (#tc (#ptr #{ORBitTypeCode}))
+                     (#val (#ptr #CObject))
                      (#release #uChar) )>
 
     ORBitAny class >> new [
         <cCall: 'CORBA_any__alloc' returning: #{ORBitAny} args: #(#void)>
+    ]
+
+    ORBitAny class >> new: anORBitTypeCode [
+        | any |
+        any := self new.
+        any tc value: anORBitTypeCode.
+        ^any
     ]
 
     free [
@@ -291,5 +327,15 @@ OrderedCollection extend [
         i := 0.
         self do: [ :e | sequence buffer value at: i put: e. i := i + 1].
         ^sequence
+    ]
+]
+
+Number extend [
+    asORBitAny [
+        | klass any |
+        klass := (self < 0) ifTrue: [CShort] ifFalse: [CUShort].
+        any := CORBA.ORBitAny new: klass typeCode.
+        any val value: (klass value: self).
+        ^any
     ]
 ]

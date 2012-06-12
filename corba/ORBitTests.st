@@ -55,4 +55,9 @@ TestCase subclass: ORBitTest [
         self assert: orbitSeq buffer value isNil.
         orbitSeq free.
     ]
+
+    testCORBAAny [
+        self assert: 1 asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/unsigned_short:1.0'.
+        self assert: -1 asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/short:1.0'
+    ]
 ]
