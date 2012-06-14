@@ -38,11 +38,16 @@ CStruct subclass: ORBitAny [
         <cCall: 'CORBA_any__alloc' returning: #{ORBitAny} args: #(#void)>
     ]
 
-    ORBitAny class >> new: anORBitTypeCode [
+    ORBitAny class >> withTypeCode: anORBitTypeCode value: aCObject [
         | any |
         any := self new.
         any tc value: anORBitTypeCode.
+        any val value: aCObject.
         ^any
+    ]
+
+    ORBitAny class >> withObjectType: aCObjectType value: aCObject [
+        ^self withTypeCode: aCObjectType typeCode value: aCObject
     ]
 
     free [
@@ -333,9 +338,35 @@ OrderedCollection extend [
 Number extend [
     asORBitAny [
         | klass any |
-        klass := (self < 0) ifTrue: [CShort] ifFalse: [CUShort].
-        any := CORBA.ORBitAny new: klass typeCode.
-        any val value: (klass value: self).
-        ^any
+        klass := (self < 0) ifTrue: [
+            (self < (-2 raisedTo: 63)) ifTrue: [
+                SystemExceptions.ArgumentOutOfRange
+                    signalOn: self
+                    mustBeBetween: (-2 raisedTo: 63)
+                    and: ((2 raisedTo: 64) - 1)
+            ].
+            (self < (-2 raisedTo: 31))
+                ifTrue: [CLongLong]
+                ifFalse: [
+                    self < (-2 raisedTo: 15)
+                        ifTrue: [CLong]
+                        ifFalse: [CShort]
+                ]
+        ] ifFalse: [
+            (self > ((2 raisedTo: 64) - 1)) ifTrue: [
+                SystemExceptions.ArgumentOutOfRange
+                    signalOn: self
+                    mustBeBetween: (-2 raisedTo: 63)
+                    and: ((2 raisedTo: 64) - 1)
+            ].
+            (self > ((2 raisedTo: 32) - 1))
+                ifTrue: [CULongLong]
+                ifFalse: [
+                    (self > ((2 raisedTo: 16) - 1))
+                        ifTrue: [CULong]
+                        ifFalse: [CUShort]
+                ]
+        ].
+        ^CORBA.ORBitAny withObjectType: klass value: (klass value: self)
     ]
 ]

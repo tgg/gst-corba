@@ -58,6 +58,15 @@ TestCase subclass: ORBitTest [
 
     testCORBAAny [
         self assert: 1 asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/unsigned_short:1.0'.
-        self assert: -1 asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/short:1.0'
+        self assert: 0 asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/unsigned_short:1.0'.
+        self assert: -1 asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/short:1.0'.
+        self assert: (-2 raisedTo: 15) asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/short:1.0'.
+        self assert: ((-2 raisedTo: 15) - 1) asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/long:1.0'.
+        self assert: (-2 raisedTo: 31) asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/long:1.0'.
+        self assert: ((-2 raisedTo: 31) - 1) asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/long_long:1.0'.
+        self assert: (-2 raisedTo: 63) asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/long_long:1.0'.
+        self assert: ((2 raisedTo: 16) - 1) asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/unsigned_short:1.0'.
+        self assert: ((2 raisedTo: 32) - 1) asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/unsigned_long:1.0'.
+        self assert: ((2 raisedTo: 64) - 1) asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/unsigned_long_long:1.0'
     ]
 ]
