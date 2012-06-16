@@ -370,3 +370,15 @@ Number extend [
         ^CORBA.ORBitAny withObjectType: klass value: (klass value: self)
     ]
 ]
+
+Boolean extend [
+    asORBitAny [
+        ^CORBA.ORBitAny withObjectType: CBoolean value: (CBoolean value: self asCBooleanValue)
+    ]
+]
+
+String extend [
+    asORBitAny [
+        ^CORBA.ORBitAny withObjectType: CString value: (CString value: self)
+    ]
+]

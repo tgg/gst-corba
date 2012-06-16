@@ -1,3 +1,4 @@
+"TODO this can be written once based on the COBject subclass name"
 CUShort class extend [
     sequenceTypeCode [
         ^CFunctionDescriptor addressOf: 'TC_CORBA_sequence_CORBA_unsigned_short_struct'
@@ -48,6 +49,15 @@ CULong class extend [
     ]
 ]
 
+CBoolean class extend [
+    sequenceTypeCode [
+        ^CFunctionDescriptor addressOf: 'TC_CORBA_sequence_CORBA_boolean_struct'
+    ]
+
+    typeCode [
+        ^CFunctionDescriptor addressOf: 'TC_CORBA_boolean_struct'
+    ]
+]
 
 CLong class extend [
     sequenceTypeCode [
@@ -56,5 +66,15 @@ CLong class extend [
 
     typeCode [
         ^CFunctionDescriptor addressOf: 'TC_CORBA_long_struct'
+    ]
+]
+
+CString class extend [
+    sequenceTypeCode [
+        ^CFunctionDescriptor addressOf: 'TC_CORBA_sequence_CORBA_string_struct'
+    ]
+
+    typeCode [
+        ^CFunctionDescriptor addressOf: 'TC_CORBA_string_struct'
     ]
 ]
