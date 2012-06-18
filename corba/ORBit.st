@@ -53,6 +53,21 @@ CStruct subclass: ORBitAny [
     free [
         <cCall: 'CORBA_free' returning: #void args: #(#self)>
     ]
+
+    ORBitAny class >> sequenceTypeCode [
+        ^CFunctionDescriptor addressOf: 'TC_CORBA_sequence_CORBA_any_struct'
+    ]
+
+    ORBitAny class >> typeCode [
+        ^CFunctionDescriptor addressOf: 'TC_CORBA_any_struct'
+    ]
+
+    value: anObject [
+        "Could we automate value: generation for CStruct?"
+        self tc value: (anObject tc value).
+        self val value: (anObject val value).
+        self release value: (anObject release value)
+    ]
 ]
 
 CStruct subclass: ORBitEnvironment [
@@ -327,10 +342,9 @@ CStruct subclass: ORBitSequence [
 
 OrderedCollection extend [
     asORBitSequenceOf: aCObjectType [
-        | sequence i |
+        | sequence |
         sequence := CORBA.ORBitSequence new: self size type: aCObjectType.
-        i := 0.
-        self do: [ :e | sequence buffer value at: i put: e. i := i + 1].
+        self keysAndValuesDo: [:i :e | sequence buffer value at: i - 1 put: e].
         ^sequence
     ]
 ]

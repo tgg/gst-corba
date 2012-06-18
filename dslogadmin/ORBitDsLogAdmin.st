@@ -254,6 +254,17 @@ Log subclass: ORBitLog [
     getCapacityAlarmThresholds: anEnvironment [
         <cCall: 'DsLogAdmin_Log_get_capacity_alarm_thresholds' returning: #{CORBA.ORBitSequence} args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
     ]
+
+    writeRecords: aAnySequence [
+        | orbitSeq |
+        orbitSeq := CORBA.ORBitSequence new: aAnySequence size type: CORBA.ORBitAny.
+        aAnySequence keysAndValuesDo: [:i :e | orbitSeq buffer value at: i - 1 put: e asORBitAny].
+        self writeRecords: orbitSeq environment: self environment
+    ]
+
+    writeRecords: aAnySequence environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_write_records' returning: #void args: #(#self (#ptr #{CORBA.ORBitSequence}) (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
 ]
 
 ORBitLog subclass: ORBitBasicLog [

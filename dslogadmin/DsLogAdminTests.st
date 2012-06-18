@@ -90,5 +90,6 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         log setCapacityAlarmThresholds:  #(50 75) asOrderedCollection.
         self assert: log getCapacityAlarmThresholds = #(50 75) asOrderedCollection.
         "self assert: log getAvailabilityStatus = AvailabilityStatus new" "Broken for now"
+        log writeRecords: #('First record' 'second record') asOrderedCollection
     ]
 ]
