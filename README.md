@@ -28,14 +28,16 @@ minimal subset of the specification using [ORBit][] so that the
 * `CORBAORB`
 * `CORBAParameter`
 * `CORBAObject`
-* `CORBAEnum` (but not yet mapped to ORBit)
+* `CORBAEnum`
 * sequence mapping
+* minimal conversion to `any`
 
 ### Usability
 
 As of `7f5e3a68d3` the `LogMgr` and `BasicLogFactory` interfaces are
-wrapped. `Log` is almost empty for now, so you cannot log or search
-(yet).
+wrapped.
+
+As of `f6130f3` `Log` can be used to write log records.
 
 
 How to use it
@@ -69,3 +71,5 @@ Here is an example session:
     OrderedCollection (0 1 )
     st> logmgr listLogs.
     OrderedCollection (DsLogAdmin.Log(16r85DE76C) DsLogAdmin.Log(16r85DE770) )
+    st> log writeRecords: #('Hello' 'There' 'How' 'are you?') asOrderedCollection.
+
