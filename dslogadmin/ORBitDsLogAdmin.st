@@ -255,6 +255,30 @@ Log subclass: ORBitLog [
         <cCall: 'DsLogAdmin_Log_get_capacity_alarm_thresholds' returning: #{CORBA.ORBitSequence} args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 
+    match: aString c: aConstraint [
+        ^self match: aString c: aConstraint environment: self environment
+    ]
+
+    match: aString c: aConstraint environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_match' returning: #uLong args: #(#self #string #string (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
+    deleteRecords: aString c: aConstraint [
+        ^self deleteRecords: aString c: aConstraint environment: self environment
+    ]
+
+    deleteRecords: aString c: aConstraint environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_delete_records' returning: #uLong args: #(#self #string #string (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
+    deleteRecordsById: aRecordIdList [
+        ^self deleteRecordsById: (aRecordIdList asORBitSequenceOf: CULongLong) environment: self environment
+    ]
+
+    deleteRecordsById: anORBitSequence environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_delete_records_by_id' returning: #uLong args: #(#self (#ptr #{CORBA.ORBitSequence}) (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
     writeRecords: aAnySequence [
         | orbitSeq |
         orbitSeq := CORBA.ORBitSequence new: aAnySequence size type: CORBA.ORBitAny.
@@ -264,6 +288,14 @@ Log subclass: ORBitLog [
 
     writeRecords: aAnySequence environment: anEnvironment [
         <cCall: 'DsLogAdmin_Log_write_records' returning: #void args: #(#self (#ptr #{CORBA.ORBitSequence}) (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
+    flush [
+        self flush: self environment
+    ]
+
+    flush: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_flush' returning: #void args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 ]
 
