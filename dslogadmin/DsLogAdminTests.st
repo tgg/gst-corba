@@ -24,7 +24,7 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
     testBasicLogFactoryCreate [
         | factory id log e |
         factory := self class stringToObject: ior.
-        log_id := nil asCORBAParameter.
+        id := nil asCORBAParameter.
         log := factory create: 0 maxSize: 0 id: id.
         self assert: id value = 0.
         self assert: (log isA: 'IDL:omg.org/DsLogAdmin/BasicLog:1.0').
