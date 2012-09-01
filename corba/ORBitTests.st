@@ -31,7 +31,7 @@ TestCase subclass: ORBitTest [
         self assert: obj id = 'IDL:omg.org/DsLogAdmin/BasicLogFactory:1.0'
     ]
 
-    testCORBASequence [
+    testSimpleAsORBitSequence [
         | orbitSeq seq |
         seq := (OrderedCollection new: 5)
             add: 2;
@@ -70,6 +70,6 @@ TestCase subclass: ORBitTest [
         self assert: ((2 raisedTo: 64) - 1) asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/unsigned_long_long:1.0'.
         self assert: true asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/boolean:1.0'.
         self assert: '' asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/string:1.0'
-        "TODO interface? object_ref? any enum union struct fixed sequence wstring array exception"
+        "TODO wchar enum float double char octet any Principal objref TypeCode exception struct union wstring sequence array long_double  null void fixed"
     ]
 ]

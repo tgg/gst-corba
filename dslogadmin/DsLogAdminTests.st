@@ -37,7 +37,7 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
     ]
 
     testLog [
-        | factory log qos halt locked on interval |
+        | factory log qos halt locked on |
         factory := self class stringToObject: ior.
         log := factory create: 0 maxSize: 0 id: (nil asCORBAParameter).
         self assert: log myFactory notNil.
@@ -74,5 +74,21 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         self assert: (log match: 'EXTENDED_TCL' c: '$.info ~= ''record''') = 2.
         self assert: (log deleteRecords: 'EXTENDED_TCL' c: '$.id == 1') = 1.
         self assert: (log deleteRecordsById: #(2) asOrderedCollection) = 1.
+    ]
+
+    testComplexAsORBitSequence [
+        | timeInterval start stop wm seq orbitSeq |
+        start := DsLogAdmin.Time24 new.
+        start hour: 8; minute: 0.
+        stop := DsLogAdmin.Time24 new.
+        stop hour: 23; minute: 50.
+        timeInterval := DsLogAdmin.Time24Interval new.
+        timeInterval start: start; stop: stop.
+        wm := DsLogAdmin.WeekMaskItem new.
+        wm days: (CORBAConstants at: '::DsLogAdmin::Sunday').
+        wm intervals: (OrderedCollection with: timeInterval).
+        seq := OrderedCollection with: wm.
+        orbitSeq := seq asORBitSequenceOf: ORBitWeekMaskItem.
+        self assert: orbitSeq asOrderedCollection = seq.
     ]
 ]
