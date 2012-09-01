@@ -263,6 +263,7 @@ The good way to do this should be to use streams."
     ]
 ]
 
+"Maybe we should subclass CArray?"
 CStruct subclass: ORBitSequence [
     <category: 'ORBit'>
     <comment: nil>
@@ -274,28 +275,33 @@ CStruct subclass: ORBitSequence [
     | bufferType |
 
     ORBitSequence class >> new: anInteger type: aCObjectType [
-        | sequence buffer |
+        | sequence |
         sequence := self allocSeq: aCObjectType sequenceTypeCode.
-        sequence length value: anInteger.
-        sequence maximum value: anInteger.
+        sequence reserve: anInteger type: aCObjectType.
         "Always free the sequence on #free"
         sequence release value: $1.
-        anInteger ~= 0 ifTrue: [
-            buffer := self allocBuf: aCObjectType sequenceTypeCode size: anInteger.
-            sequence bufferType: aCObjectType.
-            sequence buffer value: buffer
-        ].
         ^sequence
     ]
 
-    bufferType: aCObjectType [
-        bufferType := aCObjectType
+    reserve: anInteger type: aCObjectType [
+        | buffer |
+        self length value: anInteger.
+        self maximum value: anInteger.
+        self bufferType: aCObjectType.
+        anInteger ~= 0 ifTrue: [
+            buffer := self class allocBuf: aCObjectType sequenceTypeCode size: anInteger.
+            self buffer value: buffer
+        ]
     ]
 
-    replacementType [
-        ^(bufferType inheritsFrom: CORBA.ORBitObject)
-            ifTrue: [CPtrCType elementType: ((CPtrCType elementType: bufferType type) arrayType: self length value)]
-            ifFalse: [CPtrCType elementType: (bufferType type arrayType: self length value)]
+    bufferType: aCObjectType [
+        bufferType := (aCObjectType inheritsFrom: CORBA.ORBitObject)
+            ifTrue: [CPtrCType elementType: ((CPtrCType elementType: aCObjectType type) arrayType: self length value)]
+            ifFalse: [CPtrCType elementType: (aCObjectType type arrayType: self length value)].
+    ]
+
+    bufferType [
+        ^bufferType
     ]
 
     at: byteOffset type: aType [
@@ -303,7 +309,15 @@ CStruct subclass: ORBitSequence [
          This fixes ORBitSequence>>#buffer using bufferType"
         ^(bufferType notNil and: [byteOffset = 8])
             ifFalse: [super at: byteOffset type: aType]
-            ifTrue: [super at: byteOffset type: self replacementType]
+            ifTrue: [super at: byteOffset type: bufferType]
+    ]
+
+    at: byteOffset put: aValue type: aType [
+        "We override this because buffer underlying array type is known late.
+         This fixes ORBitSequence>>#buffer using bufferType"
+        ^(bufferType notNil and: [byteOffset = 8])
+            ifFalse: [super at: byteOffset put: aValue type: aType]
+            ifTrue: [super at: byteOffset put: aValue type: bufferType]
     ]
 
     ORBitSequence class >> allocSeq: aTypeCodeAddress [
@@ -329,6 +343,11 @@ CStruct subclass: ORBitSequence [
         i := 0.
         [i < len] whileTrue: [ col add: (aBlock value: (self buffer value at: i)). i := i + 1].
         ^col
+    ]
+
+    value: aCollection type: aCObjectType [
+        self reserve: aCollection size type: aCObjectType.
+        aCollection asOrderedCollection keysAndValuesDo: [:i :e | self buffer value at: i - 1 put: e]
     ]
 
     ORBitSequence class >> from: anORBitSequence type: aCObjectType orb: anORBitORB [
