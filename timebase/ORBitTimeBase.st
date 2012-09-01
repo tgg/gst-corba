@@ -16,11 +16,11 @@ CStruct subclass: ORBitUtcT [
         ^CFunctionDescriptor addressOf: 'TC_TimeBase_UtcT_struct'
     ]
 
-    ORBitUtcT class >> from: aUtcT [
-        ^(self new) with: aUtcT
+    ORBitUtcT class >> value: aUtcT [
+        ^(self new) value: aUtcT
     ]
 
-    asUtcT [
+    value [
         ^(UtcT new)
             time: self time value;
             inacclo: self inacclo value;
@@ -29,7 +29,7 @@ CStruct subclass: ORBitUtcT [
             yourself
     ]
 
-    with: aUtcT [
+    value: aUtcT [
         self time value: (aUtcT at: #time).
         self inacclo value: (aUtcT at: #inacclo).
         self inacchi value: (aUtcT at: #inacchi).
@@ -53,18 +53,18 @@ CStruct subclass: ORBitIntervalT [
         ^CFunctionDescriptor addressOf: 'TC_TimeBase_IntervalT_struct'
     ]
 
-    ORBitIntervalT class >> from: anIntervalT [
-        ^(self new) with: anIntervalT
+    ORBitIntervalT class >> value: anIntervalT [
+        ^(self new) value: anIntervalT
     ]
 
-    asIntervalT [
+    value [
         ^(IntervalT new)
             lowerBound: self lowerBound value;
             upperBound: self upperBound value;
             yourself
     ]
 
-    with: anIntervalT [
+    value: anIntervalT [
         self lowerBound value: (anIntervalT at: #lowerBound).
         self upperBound value: (anIntervalT at: #upperBound)
     ]

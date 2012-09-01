@@ -16,18 +16,18 @@ CStruct subclass: ORBitTimeInterval [
         ^CFunctionDescriptor addressOf: 'TC_DsLogAdmin_TimeInterval_struct'
     ]
 
-    ORBitTimeInterval class >> from: aTimeInterval [
-        ^(self new) with: aTimeInterval
+    ORBitTimeInterval class >> value: aTimeInterval [
+        ^(self new) value: aTimeInterval
     ]
 
-    asTimeInterval [
+    value [
         ^(TimeInterval new)
             start: self start value;
             stop: self stop value;
             yourself
     ]
 
-    with: aTimeInterval [
+    value: aTimeInterval [
         self start value: (aTimeInterval at: #start).
         self stop value: (aTimeInterval at: #stop)
     ]
@@ -51,20 +51,133 @@ CStruct subclass: ORBitAvailabilityStatus [
         ^CFunctionDescriptor addressOf: 'TC_DsLogAdmin_AvailabilityStatus_struct'
     ]
 
-    ORBitAvailabilityStatus class >> from: anAvailabilityStatus [
-        ^(self new) with: anAvailabilityStatus
+    ORBitAvailabilityStatus class >> value: anAvailabilityStatus [
+        ^(self new) value: anAvailabilityStatus
     ]
 
-    asAvailabilityStatus [
+    value [
         ^(AvailabilityStatus new)
             offDuty: self offDuty value;
             logFull: self logFull value;
             yourself
     ]
 
-    with: anAvailabilityStatus [
+    value: anAvailabilityStatus [
         self offDuty value: (anAvailabilityStatus at: #offDuty).
         self logFull value: (anAvailabilityStatus at: #logFull)
+    ]
+]
+
+CStruct subclass: ORBitTime24 [
+    <category: 'ORBit'>
+    <comment: nil>
+    <declaration: #( (#hour #uShort)
+                     (#minute #uShort) )>
+
+    ORBitTime24 class >> new [
+        ^self fromTypeCode: self typeCode
+    ]
+
+    ORBitTime24 class >> fromTypeCode: anAddress [
+        <cCall: 'ORBit_small_alloc' returning: #{ORBitTime24} args: #(#cObject)>
+    ]
+
+    ORBitTime24 class >> typeCode [
+        ^CFunctionDescriptor addressOf: 'TC_DsLogAdmin_Time24_struct'
+    ]
+
+    ORBitTime24 class >> value: aTime24 [
+        ^(self new) value: aTime24
+    ]
+
+    value [
+        ^(Time24 new)
+            hour: self hour value;
+            minute: self minute value;
+            yourself
+    ]
+
+    value: aTime24 [
+        self hour value: (aTime24 at: #hour).
+        self minute value: (aTime24 at: #minute)
+    ]
+]
+
+CStruct subclass: ORBitTime24Interval [
+    <category: 'ORBit'>
+    <comment: nil>
+    <declaration: #( (#start #{ORBitTime24})
+                     (#stop #{ORBitTime24}) )>
+
+    ORBitTime24Interval class >> new [
+        ^self fromTypeCode: self typeCode
+    ]
+
+    ORBitTime24Interval class >> fromTypeCode: anAddress [
+        <cCall: 'ORBit_small_alloc' returning: #{ORBitTime24Interval} args: #(#cObject)>
+    ]
+
+    ORBitTime24Interval class >> typeCode [
+        ^CFunctionDescriptor addressOf: 'TC_DsLogAdmin_Time24Interval_struct'
+    ]
+
+    ORBitTime24Interval class >> sequenceTypeCode [
+        ^CFunctionDescriptor addressOf: 'TC_CORBA_sequence_DsLogAdmin_Time24Interval_struct'
+    ]
+
+    ORBitTime24Interval class >> value: aTime24Interval [
+        ^(self new) value: aTime24Interval
+    ]
+
+    value [
+        ^(Time24Interval new)
+            start: self start value;
+            stop: self stop value;
+            yourself
+    ]
+
+    value: aTime24Interval [
+        self start value: (aTime24Interval at: #start).
+        self stop value: (aTime24Interval at: #stop)
+    ]
+]
+
+CStruct subclass: ORBitWeekMaskItem [
+    <category: 'ORBit'>
+    <comment: nil>
+    <declaration: #( (#days #uShort)
+                     (#intervals #{CORBA.ORBitSequence}) )>
+
+    ORBitWeekMaskItem class >> new [
+        ^self fromTypeCode: self typeCode
+    ]
+
+    ORBitWeekMaskItem class >> fromTypeCode: anAddress [
+        <cCall: 'ORBit_small_alloc' returning: #{ORBitWeekMaskItem} args: #(#cObject)>
+    ]
+
+    ORBitWeekMaskItem class >> typeCode [
+        ^CFunctionDescriptor addressOf: 'TC_DsLogAdmin_WeekMaskItem_struct'
+    ]
+
+    ORBitWeekMaskItem class >> sequenceTypeCode [
+        ^CFunctionDescriptor addressOf: 'TC_CORBA_sequence_DsLogAdmin_WeekMaskItem_struct'
+    ]
+
+    ORBitWeekMaskItem class >> value: aWeekMaskItem [
+        ^(self new) value: aWeekMaskItem
+    ]
+
+    value [
+        ^(WeekMaskItem new)
+            days: self days value;
+            intervals: self intervals asOrderedCollection;
+            yourself
+    ]
+
+    value: aWeekMaskItem [
+        self days value: (aWeekMaskItem at: #days).
+        self intervals value: (aWeekMaskItem at: #intervals) type: ORBitTime24Interval.
     ]
 ]
 
@@ -221,7 +334,7 @@ Log subclass: ORBitLog [
     ]
 
     setInterval: aTimeInterval [
-        self setInterval: (ORBitTimeInterval from: aTimeInterval) environment: self environment
+        self setInterval: (ORBitTimeInterval value: aTimeInterval) environment: self environment
     ]
 
     setInterval: anORBitTimeInterval environment: anEnvironment [
@@ -253,6 +366,26 @@ Log subclass: ORBitLog [
 
     getCapacityAlarmThresholds: anEnvironment [
         <cCall: 'DsLogAdmin_Log_get_capacity_alarm_thresholds' returning: #{CORBA.ORBitSequence} args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
+    getWeekMask [
+        | sequence |
+        sequence := self getWeekMask: self environment.
+        ^CORBA.ORBitSequence from: sequence type: ORBitWeekMaskItem orb: self orb
+    ]
+
+    getWeekMask: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_get_week_mask' returning: #{CORBA.ORBitSequence} args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
+    setWeekMask: aWeekMaskCollection [
+        | sequence |
+        sequence := aWeekMaskCollection asOrderedCollection asORBitSequenceOf: ORBitWeekMaskItem.
+        self setWeekMask: sequence environment: self environment
+    ]
+
+    setWeekMask: anORBitWeekMaskItemCollection environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_set_week_mask' returning: #void args: #(#self (#ptr #{CORBA.ORBitSequence}) (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 
     match: aString c: aConstraint [
