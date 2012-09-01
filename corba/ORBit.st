@@ -263,54 +263,36 @@ The good way to do this should be to use streams."
     ]
 ]
 
-CArray subclass: ORBitSequenceBuffer [
-    <category: 'ORBit'>
-    <comment: nil>
-
-    ORBitSequenceBuffer class >> new: anInteger type: aCObjectType [
-        ^(anInteger ~= 0)
-            ifTrue: [
-                (self allocBuf: aCObjectType sequenceTypeCode size: anInteger)
-                    bufferType: aCObjectType size: anInteger;
-                    yourself
-            ]
-            ifFalse: [nil]
-    ]
-
-    bufferType: aCObjectType size: anInteger [
-        | bufferType |
-        bufferType := (aCObjectType inheritsFrom: CORBA.ORBitObject)
-            ifTrue: [(CPtrCType elementType: aCObjectType type) arrayType: anInteger]
-            ifFalse: [aCObjectType type arrayType: anInteger].
-        self type: bufferType
-    ]
-
-    ORBitSequenceBuffer class >> allocBuf: aTypeCodeAddress size: anInteger [
-        <cCall: 'ORBit_small_allocbuf' returning: #{ORBitSequenceBuffer} args: #(#cObject #uLong)>
-    ]
-]
-
 CStruct subclass: ORBitSequence [
     <category: 'ORBit'>
     <comment: nil>
     <declaration: #( (#maximum #uLong)
                      (#length #uLong)
-                     (#buffer (#ptr #{ORBitSequenceBuffer}))
+                     (#buffer (#ptr #{CArray}))
                      (#release #uChar) )>
 
     ORBitSequence class >> new: anInteger type: aCObjectType [
         | sequence |
         sequence := self allocSeq: aCObjectType sequenceTypeCode.
+        sequence maximum value: anInteger.
+        sequence length value: anInteger.
         sequence reserve: anInteger type: aCObjectType.
         "Always free the sequence on #free"
         sequence release value: $1.
         ^sequence
     ]
 
+    ORBitSequence class >> allocBuf: aTypeCodeAddress size: anInteger [
+        <cCall: 'ORBit_small_allocbuf' returning: #cObject args: #(#cObject #uLong)>
+    ]
+
     reserve: anInteger type: aCObjectType [
-        self length value: anInteger.
-        self maximum value: anInteger.
-        self buffer value: (ORBitSequenceBuffer new: anInteger type: aCObjectType)
+        | buffer arrayType |
+        arrayType := aCObjectType type arrayType: anInteger.
+        buffer := (anInteger ~= 0)
+            ifTrue: [self class allocBuf: aCObjectType sequenceTypeCode size: anInteger]
+            ifFalse: [0].
+        self buffer value: (arrayType address: buffer).
     ]
 
     ORBitSequence class >> allocSeq: aTypeCodeAddress [
