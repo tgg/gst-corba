@@ -268,17 +268,15 @@ CStruct subclass: ORBitSequence [
     <comment: nil>
     <declaration: #( (#maximum #uLong)
                      (#length #uLong)
-                     (#buffer (#ptr #{CArray}))
+                     (#buffer (#ptr #CObject))
                      (#release #uChar) )>
+
+    | arrayType |
 
     ORBitSequence class >> new: anInteger type: aCObjectType [
         | sequence |
         sequence := self allocSeq: aCObjectType sequenceTypeCode.
-        sequence maximum value: anInteger.
-        sequence length value: anInteger.
         sequence reserve: anInteger type: aCObjectType.
-        "Always free the sequence on #free"
-        sequence release value: $1.
         ^sequence
     ]
 
@@ -287,16 +285,42 @@ CStruct subclass: ORBitSequence [
     ]
 
     reserve: anInteger type: aCObjectType [
-        | buffer arrayType |
-        arrayType := aCObjectType type arrayType: anInteger.
+        | buffer |
+        self maximum value: anInteger.
+        self length value: anInteger.
+        self arrayType: aCObjectType numberOfElements: anInteger.
         buffer := (anInteger ~= 0)
             ifTrue: [self class allocBuf: aCObjectType sequenceTypeCode size: anInteger]
             ifFalse: [0].
-        self buffer value: (arrayType address: buffer).
+        self buffer value: buffer.
+        "Always free the sequence on #free"
+        self release value: $1
+    ]
+
+    arrayType: aCObjectType [
+        self arrayType: aCObjectType numberOfElements: self length value
+    ]
+
+    arrayType: aCObjectType numberOfElements: anInteger [
+        arrayType := (aCObjectType inheritsFrom: CORBA.ORBitObject)
+            ifTrue: [(CPtrCType elementType: aCObjectType type) arrayType: anInteger]
+            ifFalse: [aCObjectType type arrayType: anInteger]
+    ]
+
+    arrayType [
+        ^arrayType
     ]
 
     ORBitSequence class >> allocSeq: aTypeCodeAddress [
         <cCall: 'ORBit_small_alloc' returning: #{ORBitSequence} args: #(#cObject)>
+    ]
+
+    bufferAt: anIndex [
+        ^(self buffer value castTo: arrayType) at: anIndex
+    ]
+
+    bufferAt: anIndex put: aValue [
+        ^(self buffer value castTo: arrayType) at: anIndex put: aValue
     ]
 
     free [
@@ -307,22 +331,26 @@ CStruct subclass: ORBitSequence [
         ^self asOrderedCollectionDo: [:e | e]
     ]
 
+    value [
+        ^self asOrderedCollection
+    ]
+
     asOrderedCollectionDo: aBlock [
         | col len i |
         len := self length value.
         col := OrderedCollection new: len.
         i := 0.
-        [i < len] whileTrue: [ col add: (aBlock value: (self buffer value at: i)). i := i + 1].
+        [i < len] whileTrue: [ col add: (aBlock value: (self bufferAt: i)). i := i + 1].
         ^col
     ]
 
     value: aCollection type: aCObjectType [
         self reserve: aCollection size type: aCObjectType.
-        aCollection asOrderedCollection keysAndValuesDo: [:i :e | self buffer value at: i - 1 put: e]
+        aCollection asOrderedCollection keysAndValuesDo: [:i :e | self bufferAt: i - 1 put: e].
     ]
 
     ORBitSequence class >> from: anORBitSequence type: aCObjectType orb: anORBitORB [
-        anORBitSequence bufferType: aCObjectType.
+        anORBitSequence arrayType: aCObjectType.
         ^[(aCObjectType inheritsFrom: CORBA.ORBitObject)
             ifFalse: [anORBitSequence asOrderedCollection]
             ifTrue: [anORBitSequence asOrderedCollectionDo: [:e | anORBitORB bootstrap: e]]
@@ -334,7 +362,7 @@ OrderedCollection extend [
     asORBitSequenceOf: aCObjectType [
         | sequence |
         sequence := CORBA.ORBitSequence new: self size type: aCObjectType.
-        self keysAndValuesDo: [:i :e | sequence buffer value at: i - 1 put: e].
+        self keysAndValuesDo: [:i :e | sequence bufferAt: i - 1 put: e].
         ^sequence
     ]
 ]
