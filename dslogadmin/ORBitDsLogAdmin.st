@@ -171,7 +171,7 @@ CStruct subclass: ORBitWeekMaskItem [
     value [
         ^(WeekMaskItem new)
             days: self days value;
-            intervals: self intervals asOrderedCollection;
+            intervals: (self intervals asOrderedCollectionOf: ORBitTime24Interval);
             yourself
     ]
 

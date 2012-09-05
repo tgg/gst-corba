@@ -288,7 +288,7 @@ CStruct subclass: ORBitSequence [
         | buffer |
         self maximum value: anInteger.
         self length value: anInteger.
-        self arrayType: aCObjectType numberOfElements: anInteger.
+        self arrayType: aCObjectType.
         buffer := (anInteger ~= 0)
             ifTrue: [self class allocBuf: aCObjectType sequenceTypeCode size: anInteger]
             ifFalse: [0].
@@ -298,17 +298,17 @@ CStruct subclass: ORBitSequence [
     ]
 
     arrayType: aCObjectType [
-        self arrayType: aCObjectType numberOfElements: self length value
+        arrayType := aCObjectType
     ]
 
-    arrayType: aCObjectType numberOfElements: anInteger [
-        arrayType := (aCObjectType inheritsFrom: CORBA.ORBitObject)
+    arrayTypeOf: aCObjectType [
+        ^self class arrayTypeOf: aCObjectType numberOfElements: self length value
+    ]
+
+    ORBitSequence class >> arrayTypeOf: aCObjectType numberOfElements: anInteger [
+        ^(aCObjectType inheritsFrom: CORBA.ORBitObject)
             ifTrue: [(CPtrCType elementType: aCObjectType type) arrayType: anInteger]
-            ifFalse: [aCObjectType type arrayType: anInteger]
-    ]
-
-    arrayType [
-        ^arrayType
+            ifFalse: [aCObjectType type arrayType: anInteger].
     ]
 
     ORBitSequence class >> allocSeq: aTypeCodeAddress [
@@ -316,15 +316,32 @@ CStruct subclass: ORBitSequence [
     ]
 
     bufferAt: anIndex [
-        ^(self buffer value castTo: arrayType) at: anIndex
+        ^self bufferAt: anIndex type: arrayType
+    ]
+
+    bufferAt: anIndex type: aType [
+        ^(self buffer value castTo: (self arrayTypeOf: aType)) at: anIndex
     ]
 
     bufferAt: anIndex put: aValue [
-        ^(self buffer value castTo: arrayType) at: anIndex put: aValue
+        ^self bufferAt: anIndex put: aValue type: arrayType
+    ]
+
+    bufferAt: anIndex put: aValue type: aType [
+        ^(self buffer value castTo: (self arrayTypeOf: aType)) at: anIndex put: aValue
     ]
 
     free [
         <cCall: 'CORBA_free' returning: #void args: #(#self)>
+    ]
+
+    asOrderedCollectionOf: aCObjectType [
+        | col len i |
+        len := self length value.
+        col := OrderedCollection new: len.
+        i := 0.
+        [i < len] whileTrue: [ col add: (self bufferAt: i type: aCObjectType). i := i + 1].
+        ^col
     ]
 
     asOrderedCollection [
@@ -346,7 +363,7 @@ CStruct subclass: ORBitSequence [
 
     value: aCollection type: aCObjectType [
         self reserve: aCollection size type: aCObjectType.
-        aCollection asOrderedCollection keysAndValuesDo: [:i :e | self bufferAt: i - 1 put: e].
+        aCollection asOrderedCollection keysAndValuesDo: [:i :e | self bufferAt: i - 1 put: e type: aCObjectType].
     ]
 
     ORBitSequence class >> from: anORBitSequence type: aCObjectType orb: anORBitORB [
