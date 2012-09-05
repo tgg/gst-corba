@@ -1,13 +1,24 @@
 CORBA.ORBitTest subclass: DsLogAdminTest [
     IorPath := '/tmp/basic.ior'.
 
-    | tao ior |
+    | tao ior weekMask |
 
     setUp [
+        | timeInterval start stop weekMaskItem |
         tao := ThisOSProcess uniqueInstance
             forkAndExec: 'tao_tls_basic' with: {'-x' . '-o' . IorPath}.
         (Delay forSeconds: 2) wait.
-        ior := IorPath asFile contents lines at: 1
+        ior := IorPath asFile contents lines at: 1.
+        start := DsLogAdmin.Time24 new.
+        start hour: 8; minute: 0.
+        stop := DsLogAdmin.Time24 new.
+        stop hour: 23; minute: 50.
+        timeInterval := DsLogAdmin.Time24Interval new.
+        timeInterval start: start; stop: stop.
+        weekMaskItem := DsLogAdmin.WeekMaskItem new.
+        weekMaskItem days: (CORBAConstants at: '::DsLogAdmin::Sunday').
+        weekMaskItem intervals: (OrderedCollection with: timeInterval).
+        weekMask := OrderedCollection with: weekMaskItem
     ]
 
     tearDown [
@@ -77,18 +88,8 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
     ]
 
     testComplexAsORBitSequence [
-        | timeInterval start stop wm seq orbitSeq |
-        start := DsLogAdmin.Time24 new.
-        start hour: 8; minute: 0.
-        stop := DsLogAdmin.Time24 new.
-        stop hour: 23; minute: 50.
-        timeInterval := DsLogAdmin.Time24Interval new.
-        timeInterval start: start; stop: stop.
-        wm := DsLogAdmin.WeekMaskItem new.
-        wm days: (CORBAConstants at: '::DsLogAdmin::Sunday').
-        wm intervals: (OrderedCollection with: timeInterval).
-        seq := OrderedCollection with: wm.
-        orbitSeq := seq asORBitSequenceOf: ORBitWeekMaskItem.
-        self assert: orbitSeq asOrderedCollection = seq.
+        |  orbitSeq |
+        orbitSeq := weekMask asORBitSequenceOf: ORBitWeekMaskItem.
+        self assert: orbitSeq asOrderedCollection = weekMaskItem
     ]
 ]
