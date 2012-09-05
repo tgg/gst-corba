@@ -90,6 +90,6 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
     testComplexAsORBitSequence [
         |  orbitSeq |
         orbitSeq := weekMask asORBitSequenceOf: ORBitWeekMaskItem.
-        self assert: orbitSeq asOrderedCollection = weekMaskItem
+        self assert: orbitSeq asOrderedCollection = weekMask
     ]
 ]
