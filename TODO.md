@@ -7,8 +7,6 @@ Worked aound
 Missing
 -------
 
-* `Log>>#getWeekMask`
-* `Log>>#setWeekMask:`
 * `Log>>#query:c:i:`
 * `Log>>#retrieve:howMany:i:`
 * `Log>>#writeRecordList:`

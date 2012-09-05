@@ -85,6 +85,8 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         self assert: (log match: 'EXTENDED_TCL' c: '$.info ~= ''record''') = 2.
         self assert: (log deleteRecords: 'EXTENDED_TCL' c: '$.id == 1') = 1.
         self assert: (log deleteRecordsById: #(2) asOrderedCollection) = 1.
+        log setWeekMask: weekMask.
+        self assert: log getWeekMask = weekMask.
     ]
 
     testComplexAsORBitSequence [
