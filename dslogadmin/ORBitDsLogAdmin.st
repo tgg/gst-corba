@@ -415,7 +415,7 @@ Log subclass: ORBitLog [
     writeRecords: aAnySequence [
         | orbitSeq |
         orbitSeq := CORBA.ORBitSequence new: aAnySequence size type: CORBA.ORBitAny.
-        aAnySequence keysAndValuesDo: [:i :e | orbitSeq buffer value at: i - 1 put: e asORBitAny].
+        aAnySequence keysAndValuesDo: [:i :e | orbitSeq bufferAt: i - 1 put: e asORBitAny].
         self writeRecords: orbitSeq environment: self environment
     ]
 
