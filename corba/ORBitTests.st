@@ -76,6 +76,6 @@ TestCase subclass: ORBitTest [
     testAnyToSmalltalk [
         self assert: 15 asORBitAny value = 15.
         self assert: 'string' asORBitAny value = 'string'.
-        "self assert: true asORBitAny value = true"
+        self assert: true asORBitAny value = true
     ]
 ]

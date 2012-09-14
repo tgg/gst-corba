@@ -437,7 +437,7 @@ Number extend [
 
 Boolean extend [
     asORBitAny [
-        ^CORBA.ORBitAny withObjectType: CBoolean value: (CBoolean value: self asCBooleanValue)
+        ^CORBA.ORBitAny withObjectType: CBoolean value: (CBoolean value: self)
     ]
 ]
 
