@@ -68,6 +68,21 @@ CStruct subclass: ORBitAny [
         self val value: (anObject val value).
         self release value: (anObject release value)
     ]
+
+    value [
+        | tcAddress matching |
+        tcAddress := self tc value address.
+        matching := CObject selectSubclasses: [
+            :sub | (sub respondsTo: #typeCode) and: [sub typeCode address = tcAddress]
+        ].
+        ^matching size = 1
+            ifTrue: [
+                | type ptrType |
+                type := (matching asArray at: 1) type.
+                ptrType := type ptrType.
+                (self val castTo: ptrType) value value]
+            ifFalse: [nil]
+    ]
 ]
 
 CStruct subclass: ORBitEnvironment [
