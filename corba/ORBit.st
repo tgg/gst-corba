@@ -63,18 +63,28 @@ CStruct subclass: ORBitAny [
     ]
 
     value: anObject [
-        "Could we automate value: generation for CStruct?"
-        self tc value: (anObject tc value).
-        self val value: (anObject val value).
-        self release value: (anObject release value)
+        | any |
+        any := anObject asORBitAny.
+        self tc value: any tc value.
+        self val value: any val value.
+        self release value: any release value.
     ]
 
     value [
-        | tcAddress matching |
-        tcAddress := self tc value address.
+        | tcKind matching |
+        "For basic TypeCode address can differ"
+        tcKind := self tc value kind value.
         matching := CObject selectSubclasses: [
-            :sub | (sub respondsTo: #typeCode) and: [sub typeCode address = tcAddress]
+            :sub | (sub respondsTo: #tcKind) and: [sub tcKind = tcKind]
         ].
+        matching size = 1
+            ifFalse: [
+                | tcAddress |
+                tcAddress := self tc value address.
+                matching := CObject selectSubclasses: [
+                    :sub | (sub respondsTo: #typeCode) and: [sub typeCode address = tcAddress]
+                ]
+            ].
         ^matching size = 1
             ifTrue: [
                 | type ptrType |

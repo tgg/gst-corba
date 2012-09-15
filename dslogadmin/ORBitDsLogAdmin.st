@@ -181,6 +181,94 @@ CStruct subclass: ORBitWeekMaskItem [
     ]
 ]
 
+CStruct subclass: ORBitNVPair [
+    <category: 'ORBit'>
+    <comment: nil>
+    <declaration: #( (#name #string)
+                     (#value #{CORBA.ORBitAny}))>
+
+    ORBitNVPair class >> new [
+        ^self fromTypeCode: self typeCode
+    ]
+
+    ORBitNVPair class >> fromTypeCode: anAddress [
+        <cCall: 'ORBit_small_alloc' returning: #{ORBitNVPair} args: #(#cObject)>
+    ]
+
+    ORBitNVPair class >> typeCode [
+        ^CFunctionDescriptor addressOf: 'TC_DsLogAdmin_NVPair_struct'
+    ]
+
+    ORBitNVPair class >> sequenceTypeCode [
+        ^CFunctionDescriptor addressOf: 'TC_CORBA_sequence_DsLogAdmin_NVPair_struct'
+    ]
+]
+
+CStruct subclass: ORBitLogRecord [
+    <category: 'ORBit'>
+    <comment: nil>
+    <declaration: #( (#id #uLongLong)
+                     (#time #uLongLong)
+                     (#attrList #{CORBA.ORBitSequence})
+                     (#info #{CORBA.ORBitAny}))>
+
+    ORBitLogRecord class >> new [
+        ^self fromTypeCode: self typeCode
+    ]
+
+    ORBitLogRecord class >> fromTypeCode: anAddress [
+        <cCall: 'ORBit_small_alloc' returning: #{ORBitLogRecord} args: #(#cObject)>
+    ]
+
+    ORBitLogRecord class >> typeCode [
+        ^CFunctionDescriptor addressOf: 'TC_DsLogAdmin_LogRecord_struct'
+    ]
+
+    ORBitLogRecord class >> value: aLogRecord [
+        ^(self new) value: aLogRecord
+    ]
+
+    value [
+        ^(LogRecord new)
+            id: self id value;
+            time: self time value;
+            attrList: (self attrList asOrderedCollectionOf: ORBitNVPair);
+            info: self info value;
+            yourself
+    ]
+
+    value: aLogRecord [
+        self id value: (aLogRecord at: #id).
+        self time value: (aLogRecord at: #time).
+        self attrList value: (aLogRecord at: #attrList) type: ORBitNVPair.
+        self info value: (aLogRecord at: #info).
+    ]
+]
+
+Iterator subclass: ORBitIterator [
+    ORBitIterator class >> typeId [
+        ^'IDL:omg.org/DsLogAdmin/Iterator:1.0'
+    ]
+
+    get: anIndex howMany: aCount [
+        | sequence |
+        sequence := self get: anIndex howMany: aCount environment: self environment.
+        ^CORBA.ORBitSequence from: sequence type: ORBitLogRecord orb: self orb
+    ]
+
+    get: anIndex howMany: aCount environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Iterator_get' returning: #{CORBA.ORBitSequence} args: #(#self #uLong #uLong (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
+    destroy [
+        self destroy: self environment
+    ]
+
+    destroy: anEnvironment [
+        <cCall: 'DsLogAdmin_Iterator_destroy' returning: #void args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+]
+
 Log subclass: ORBitLog [
     ORBitLog class >> typeId [
         ^'IDL:omg.org/DsLogAdmin/Log:1.0'
@@ -388,6 +476,19 @@ Log subclass: ORBitLog [
         <cCall: 'DsLogAdmin_Log_set_week_mask' returning: #void args: #(#self (#ptr #{CORBA.ORBitSequence}) (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 
+    query: aString c: aConstraint i: anIterator [
+        | sequence iterator |
+        iterator := ORBitIterator new.
+        sequence := self query: aString c: aConstraint i: iterator environment: self environment.
+        ^self environment raiseOrDo: [
+            CORBA.ORBitSequence from: sequence type: ORBitLogRecord orb: self orb
+        ]
+    ]
+
+    query: aString c: aConstraint i: anIterator environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_query' returning: #{CORBA.ORBitSequence} args: #(#self #string #string #cObjectPtr (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
     match: aString c: aConstraint [
         ^self match: aString c: aConstraint environment: self environment
     ]
@@ -415,7 +516,7 @@ Log subclass: ORBitLog [
     writeRecords: aAnySequence [
         | orbitSeq |
         orbitSeq := CORBA.ORBitSequence new: aAnySequence size type: CORBA.ORBitAny.
-        aAnySequence keysAndValuesDo: [:i :e | orbitSeq bufferAt: i - 1 put: e asORBitAny].
+        aAnySequence keysAndValuesDo: [:i :e | orbitSeq bufferAt: i - 1 put: e].
         self writeRecords: orbitSeq environment: self environment
     ]
 

@@ -7,6 +7,10 @@ CUShort class extend [
     typeCode [
         ^CFunctionDescriptor addressOf: 'TC_CORBA_unsigned_short_struct'
     ]
+
+    tcKind [
+        ^4
+    ]
 ]
 
 CShort class extend [
@@ -16,6 +20,10 @@ CShort class extend [
 
     typeCode [
         ^CFunctionDescriptor addressOf: 'TC_CORBA_short_struct'
+    ]
+
+    tcKind [
+        ^2
     ]
 ]
 
@@ -27,6 +35,10 @@ CULongLong class extend [
     typeCode [
         ^CFunctionDescriptor addressOf: 'TC_CORBA_unsigned_long_long_struct'
     ]
+
+    tcKind [
+        ^24
+    ]
 ]
 
 CLongLong class extend [
@@ -36,6 +48,10 @@ CLongLong class extend [
 
     typeCode [
         ^CFunctionDescriptor addressOf: 'TC_CORBA_long_long_struct'
+    ]
+
+    tcKind [
+        ^23
     ]
 ]
 
@@ -47,6 +63,10 @@ CULong class extend [
     typeCode [
         ^CFunctionDescriptor addressOf: 'TC_CORBA_unsigned_long_struct'
     ]
+
+    tcKind [
+        ^5
+    ]
 ]
 
 CBoolean class extend [
@@ -56,6 +76,10 @@ CBoolean class extend [
 
     typeCode [
         ^CFunctionDescriptor addressOf: 'TC_CORBA_boolean_struct'
+    ]
+
+    tcKind [
+        ^8
     ]
 ]
 
@@ -67,6 +91,10 @@ CLong class extend [
     typeCode [
         ^CFunctionDescriptor addressOf: 'TC_CORBA_long_struct'
     ]
+
+    tcKind [
+        ^3
+    ]
 ]
 
 CString class extend [
@@ -76,5 +104,9 @@ CString class extend [
 
     typeCode [
         ^CFunctionDescriptor addressOf: 'TC_CORBA_string_struct'
+    ]
+
+    tcKind [
+        ^18
     ]
 ]
