@@ -91,6 +91,22 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         log destroy
     ]
 
+    testOutParameterObject [
+        | factory log records it match offset i |
+        factory := self class stringToObject: ior.
+        log := factory create: 0 maxSize: 0 id: (nil asCORBAParameter).
+
+        "TAO uses 100 as a limit for iterator by default"
+        records := 1 to: 101 collect: [ :e | 'record ', e asString ].
+        log writeRecords: records.
+        match := log query: 'EXTENDED_TCL' c: '' i: (it := nil asCORBAParameter).
+        offset := match size.
+        i := 1.
+        self assert: it value notNil.
+        match do: [ :e | self assert: e info = ('record ', i asString). i := i + 1 ].
+        self assert: (((it value get: i howMany: 0) at: 1) info) = ('record ', i asString).
+    ]
+
     testComplexAsORBitSequence [
         |  orbitSeq |
         orbitSeq := weekMask asORBitSequenceOf: ORBitWeekMaskItem.

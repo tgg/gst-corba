@@ -480,6 +480,7 @@ Log subclass: ORBitLog [
         | sequence iterator |
         iterator := ORBitIterator new.
         sequence := self query: aString c: aConstraint i: iterator environment: self environment.
+        anIterator value: iterator.
         ^self environment raiseOrDo: [
             CORBA.ORBitSequence from: sequence type: ORBitLogRecord orb: self orb
         ]
