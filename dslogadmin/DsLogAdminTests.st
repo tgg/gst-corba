@@ -77,17 +77,18 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         " interval := (TimeInterval new) stop: 15; yourself. "
         " log setInterval: interval. "
         " self assert: log getInterval = interval!" "Broken for now! "
-        log setCapacityAlarmThresholds:  #(50 75) asOrderedCollection.
+        log setCapacityAlarmThresholds:  #(50 75).
         self assert: log getCapacityAlarmThresholds = #(50 75) asOrderedCollection.
         "self assert: log getAvailabilityStatus = AvailabilityStatus new" "Broken for now"
-        self shouldnt: [log writeRecords: #('First record' 'second record' 'third') asOrderedCollection] raise: Exception.
+        self shouldnt: [log writeRecords: #('First record' 'second record' 'third')] raise: Exception.
         self shouldnt: [log flush] raise: Exception.
         self assert: (log match: 'EXTENDED_TCL' c: '$.info ~= ''record''') = 2.
         self assert: (log deleteRecords: 'EXTENDED_TCL' c: '$.id == 1') = 1.
-        self assert: (log deleteRecordsById: #(2) asOrderedCollection) = 1.
+        self assert: (log deleteRecordsById: #(2)) = 1.
         log setWeekMask: weekMask.
         self assert: log getWeekMask = weekMask.
-        self assert: ((log query: 'EXTENDED_TCL' c: '' i: (nil asCORBAParameter)) at: 1) info = 'third'
+        self assert: ((log query: 'EXTENDED_TCL' c: '' i: (nil asCORBAParameter)) at: 1) info = 'third'.
+        log destroy
     ]
 
     testComplexAsORBitSequence [

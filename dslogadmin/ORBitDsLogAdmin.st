@@ -439,7 +439,7 @@ Log subclass: ORBitLog [
     ]
 
     setCapacityAlarmThresholds: aSequence [
-        self setCapacityAlarmThresholds: (aSequence asORBitSequenceOf: CUShort) environment: self environment
+        self setCapacityAlarmThresholds: (aSequence asOrderedCollection asORBitSequenceOf: CUShort) environment: self environment
     ]
 
     setCapacityAlarmThresholds: aCapacityAlarmThresholdList environment: anEnvironment [
@@ -506,7 +506,7 @@ Log subclass: ORBitLog [
     ]
 
     deleteRecordsById: aRecordIdList [
-        ^self deleteRecordsById: (aRecordIdList asORBitSequenceOf: CULongLong) environment: self environment
+        ^self deleteRecordsById: (aRecordIdList asOrderedCollection asORBitSequenceOf: CULongLong) environment: self environment
     ]
 
     deleteRecordsById: anORBitSequence environment: anEnvironment [
@@ -516,7 +516,7 @@ Log subclass: ORBitLog [
     writeRecords: aAnySequence [
         | orbitSeq |
         orbitSeq := CORBA.ORBitSequence new: aAnySequence size type: CORBA.ORBitAny.
-        aAnySequence keysAndValuesDo: [:i :e | orbitSeq bufferAt: i - 1 put: e].
+        aAnySequence asOrderedCollection keysAndValuesDo: [:i :e | orbitSeq bufferAt: i - 1 put: e].
         self writeRecords: orbitSeq environment: self environment
     ]
 
