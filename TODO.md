@@ -7,7 +7,6 @@ Worked aound
 Missing
 -------
 
-* `Log>>#query:c:i:`
 * `Log>>#retrieve:howMany:i:`
 * `Log>>#writeRecordList:`
 * `Log>>#setRecordAttribute:attrList:`

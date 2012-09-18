@@ -13,6 +13,34 @@ What it is?
   [gst]: http://smalltalk.gnu.org
 
 
+How to install it
+-----------------
+
+For now gst-corba requires git version of [GNU Smalltalk][gst]. See
+[this page][git] for information on how to install git version of gst.
+
+Running gst-corba require installing [ORBit2][orbit] packages, and
+[tao-tls] implementation for tests. You can do this with:
+
+    $ sudo apt-get install liborbit2-dev tao-tls
+
+As well as [gst-osprocess] for unit tests:
+
+    $ git clone git://github.com/MrGwen/gst-osprocess
+    $ (cd gst-osprocess && ./package.sh)
+
+Last, clone, setup and run gst-corba:
+
+    $ git clone git://github.com/tgg/gst-corba.git
+    $ cd gst-corba
+    $ export LD_LIBRARY_PATH=$PWD/generated # Needed for stub lib
+    $ make                                  # Also runs unit tests
+
+  [git]: http://smalltalk.gnu.org/download/cvs
+  [gst-osprocess]: http://github.com/MrGwen/gst-osprocess
+  [tao-tls]: http://www.cs.wustl.edu/~schmidt/TAO.html
+
+
 Current status
 --------------
 
@@ -30,7 +58,7 @@ minimal subset of the specification using [ORBit][] so that the
 * `CORBAObject`
 * `CORBAEnum`
 * sequence mapping
-* minimal conversion to `any`
+* minimal conversion to/from `any`
 
 ### Usability
 
@@ -38,6 +66,8 @@ As of `7f5e3a68d3` the `LogMgr` and `BasicLogFactory` interfaces are
 wrapped.
 
 As of `f6130f3` `Log` can be used to write log records.
+
+As of `1285415` you can search log records.
 
 
 How to use it
