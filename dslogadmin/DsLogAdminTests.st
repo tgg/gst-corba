@@ -6,7 +6,11 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
     setUp [
         | timeInterval start stop weekMaskItem |
         tao := ThisOSProcess uniqueInstance
-            forkAndExec: 'tao_tls_basic' with: {'-x' . '-o' . IorPath}.
+            forkAndExec: 'tao_tls_basic' with: {
+                '-x' .
+                '-ORBEndPoint' . 'iiop://127.0.0.1' .
+                '-o' . IorPath
+            }.
         (Delay forSeconds: 2) wait.
         ior := IorPath asFile contents lines at: 1.
         start := DsLogAdmin.Time24 new.
