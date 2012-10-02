@@ -224,6 +224,10 @@ CStruct subclass: ORBitLogRecord [
         ^CFunctionDescriptor addressOf: 'TC_DsLogAdmin_LogRecord_struct'
     ]
 
+    ORBitLogRecord class >> sequenceTypeCode [
+        ^CFunctionDescriptor addressOf: 'TC_CORBA_sequence_DsLogAdmin_LogRecord_struct'
+    ]
+
     ORBitLogRecord class >> value: aLogRecord [
         ^(self new) value: aLogRecord
     ]
@@ -241,7 +245,7 @@ CStruct subclass: ORBitLogRecord [
         self id value: (aLogRecord at: #id).
         self time value: (aLogRecord at: #time).
         self attrList value: (aLogRecord at: #attrList) type: ORBitNVPair.
-        self info value: (aLogRecord at: #info).
+        self info value: (aLogRecord at: #info)
     ]
 ]
 
@@ -539,7 +543,17 @@ Log subclass: ORBitLog [
         <cCall: 'DsLogAdmin_Log_write_records' returning: #void args: #(#self (#ptr #{CORBA.ORBitSequence}) (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 
-    "TODO: writeRecordList"
+    writeRecordList: aRecordList [
+        | orbitSeq |
+        orbitSeq := CORBA.ORBitSequence new: aRecordList size type: ORBitLogRecord.
+        aRecordList asOrderedCollection keysAndValuesDo: [:i :e | orbitSeq bufferAt: i - 1 put: e].
+        self writeRecordList: orbitSeq environment: self environment.
+    ]
+
+    writeRecordList: aSequence environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_write_recordlist' returning: #void args: #(#self (#ptr #{CORBA.ORBitSequence}) (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
     "TODO: setRecordAttribute"
     "TODO: setRecordsAttribute"
     "TODO: getRecordAttribute"

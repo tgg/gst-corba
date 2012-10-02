@@ -52,7 +52,7 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
     ]
 
     testLog [
-        | factory log qos halt locked on |
+        | factory log qos halt locked on records |
         factory := self class stringToObject: ior.
         log := factory create: 0 maxSize: 0 id: (nil asCORBAParameter).
         self assert: log myFactory notNil.
@@ -92,6 +92,11 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         log setWeekMask: weekMask.
         self assert: log getWeekMask = weekMask.
         self assert: ((log query: 'EXTENDED_TCL' c: '' i: (nil asCORBAParameter)) at: 1) info = 'third'.
+        records := { (LogRecord new) info: 'logrecord 1' .
+                     (LogRecord new) info: 'logrecord 2' }.
+        self shouldnt: [log writeRecordList: records.] raise: Exception.
+        (log query: 'EXTENDED_TCL' c: '$.info ~= ''logrecord''' i: (nil asCORBAParameter)) display.
+        self assert: (log match: 'EXTENDED_TCL' c: '$.info ~= ''logrecord''') = 2.
         log destroy
     ]
 
