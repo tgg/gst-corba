@@ -96,7 +96,7 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
     ]
 
     testOutParameterObject [
-        | factory log records it match offset i |
+        | factory log records it match offset i first |
         factory := self class stringToObject: ior.
         log := factory create: 0 maxSize: 0 id: (nil asCORBAParameter).
 
@@ -104,11 +104,19 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         records := 1 to: 101 collect: [ :e | 'record ', e asString ].
         log writeRecords: records.
         match := log query: 'EXTENDED_TCL' c: '' i: (it := nil asCORBAParameter).
+        first := (match at: 1) time.
         offset := match size.
         i := 1.
         self assert: it value notNil.
         match do: [ :e | self assert: e info = ('record ', i asString). i := i + 1 ].
         self assert: (((it value get: i howMany: 0) at: 1) info) = ('record ', i asString).
+        match := log retrieve: first howMany: 100 i: (it := nil asCORBAParameter).
+        offset := match size.
+        i := 1.
+        self assert: it value notNil.
+        match do: [ :e | self assert: e info = ('record ', i asString). i := i + 1 ].
+        self assert: (((it value get: i howMany: 0) at: 1) info) = ('record ', i asString).
+        log destroy
     ]
 
     testComplexAsORBitSequence [

@@ -480,7 +480,7 @@ Log subclass: ORBitLog [
         | sequence iterator |
         iterator := ORBitIterator new.
         sequence := self query: aString c: aConstraint i: iterator environment: self environment.
-        anIterator value: iterator.
+        iterator isNull ifFalse: [anIterator value: iterator].
         ^self environment raiseOrDo: [
             CORBA.ORBitSequence from: sequence type: ORBitLogRecord orb: self orb
         ]
@@ -488,6 +488,20 @@ Log subclass: ORBitLog [
 
     query: aString c: aConstraint i: anIterator environment: anEnvironment [
         <cCall: 'DsLogAdmin_Log_query' returning: #{CORBA.ORBitSequence} args: #(#self #string #string #cObjectPtr (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
+    retrieve: aTimeT howMany: aLong i: anIterator [
+        | sequence iterator |
+        iterator := ORBitIterator new.
+        sequence := self retrieve: aTimeT howMany: aLong i: iterator environment: self environment.
+        iterator isNull ifFalse: [anIterator value: iterator].
+        ^self environment raiseOrDo: [
+            CORBA.ORBitSequence from: sequence type: ORBitLogRecord orb: self orb
+        ]
+    ]
+
+    retrieve: aTimeT howMany: aLong i: iterator environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_retrieve' returning: #{CORBA.ORBitSequence} args: #(#self #uLongLong #long #cObjectPtr (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 
     match: aString c: aConstraint [
@@ -524,6 +538,13 @@ Log subclass: ORBitLog [
     writeRecords: aAnySequence environment: anEnvironment [
         <cCall: 'DsLogAdmin_Log_write_records' returning: #void args: #(#self (#ptr #{CORBA.ORBitSequence}) (#ptr #{CORBA.ORBitEnvironment}))>
     ]
+
+    "TODO: writeRecordList"
+    "TODO: setRecordAttribute"
+    "TODO: setRecordsAttribute"
+    "TODO: getRecordAttribute"
+    "TODO: copy"
+    "TODO: copyWithId"
 
     flush [
         self flush: self environment
