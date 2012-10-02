@@ -387,8 +387,10 @@ CStruct subclass: ORBitSequence [
     ]
 
     value: aCollection type: aCObjectType [
-        self reserve: aCollection size type: aCObjectType.
-        aCollection asOrderedCollection keysAndValuesDo: [:i :e | self bufferAt: i - 1 put: e type: aCObjectType].
+        aCollection isNil ifFalse: [
+            self reserve: aCollection size type: aCObjectType.
+            aCollection asOrderedCollection keysAndValuesDo: [:i :e | self bufferAt: i - 1 put: e type: aCObjectType]
+        ]
     ]
 
     ORBitSequence class >> from: anORBitSequence type: aCObjectType orb: anORBitORB [
