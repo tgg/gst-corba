@@ -20,7 +20,7 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         timeInterval := DsLogAdmin.Time24Interval new.
         timeInterval start: start; stop: stop.
         weekMaskItem := DsLogAdmin.WeekMaskItem new.
-        weekMaskItem days: (CORBAConstants at: '::DsLogAdmin::Sunday').
+        weekMaskItem days: 127.
         weekMaskItem intervals: (OrderedCollection with: timeInterval).
         weekMask := OrderedCollection with: weekMaskItem
     ]
