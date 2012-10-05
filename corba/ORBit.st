@@ -67,7 +67,7 @@ CStruct subclass: ORBitAny [
         any := anObject asORBitAny.
         self tc value: any tc value.
         self val value: any val value.
-        self release value: any release value.
+        self release value: any release value
     ]
 
     value [

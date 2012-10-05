@@ -102,5 +102,5 @@ Here is an example session:
     OrderedCollection (0 1 )
     st> logmgr listLogs.
     OrderedCollection (DsLogAdmin.Log(16r85DE76C) DsLogAdmin.Log(16r85DE770) )
-    st> log writeRecords: #('Hello' 'There' 'How' 'are you?') asOrderedCollection.
+    st> log writeRecords: #('Hello' 'There' 'How' 'are you?').
 
