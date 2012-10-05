@@ -14,9 +14,9 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         (Delay forSeconds: 2) wait.
         ior := IorPath asFile contents lines at: 1.
         start := DsLogAdmin.Time24 new.
-        start hour: 8; minute: 0.
+        start hour: 0; minute: 0.
         stop := DsLogAdmin.Time24 new.
-        stop hour: 23; minute: 50.
+        stop hour: 23; minute: 59.
         timeInterval := DsLogAdmin.Time24Interval new.
         timeInterval start: start; stop: stop.
         weekMaskItem := DsLogAdmin.WeekMaskItem new.
