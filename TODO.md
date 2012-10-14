@@ -7,10 +7,7 @@ Worked aound
 Missing
 -------
 
-* `Log>>#writeRecordList:`
-* `Log>>#setRecordAttribute:attrList:`
 * `Log>>#setRecordsAttribute:c:attrList:`
-* `Log>>#getRecordAttribute:`
 * `Log>>#copy:`
 * `Log>>#copyWithId:`
 
