@@ -185,7 +185,7 @@ CStruct subclass: ORBitNVPair [
     <category: 'ORBit'>
     <comment: nil>
     <declaration: #( (#name #string)
-                     (#value #{CORBA.ORBitAny}))>
+                     (#val #{CORBA.ORBitAny}))>
 
     ORBitNVPair class >> new [
         ^self fromTypeCode: self typeCode
@@ -201,6 +201,22 @@ CStruct subclass: ORBitNVPair [
 
     ORBitNVPair class >> sequenceTypeCode [
         ^CFunctionDescriptor addressOf: 'TC_CORBA_sequence_DsLogAdmin_NVPair_struct'
+    ]
+
+    ORBitNVPair class >> value: aNVPair [
+        ^(self new) value: aNVPair
+    ]
+
+    value [
+        ^(NVPair new)
+            name: self name value;
+            value: self val value;
+            yourself
+    ]
+
+    value: aNVPair [
+        self name value: (aNVPair at: #name).
+        self val value: (aNVPair at: #value)
     ]
 ]
 
@@ -554,9 +570,31 @@ Log subclass: ORBitLog [
         <cCall: 'DsLogAdmin_Log_write_recordlist' returning: #void args: #(#self (#ptr #{CORBA.ORBitSequence}) (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 
-    "TODO: setRecordAttribute"
+    setRecordAttribute: aRecordId attrList: aNVList [
+        | orbitSeq |
+        orbitSeq := CORBA.ORBitSequence new: aNVList size type: ORBitNVPair.
+        aNVList asOrderedCollection keysAndValuesDo: [:i :e | orbitSeq bufferAt: i - 1 put: e].
+        self setRecordAttribute: aRecordId attrList: orbitSeq environment: self environment
+    ]
+
+    setRecordAttribute: aRecordId attrList: aNVList environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_set_record_attribute' returning: #void args: #(#self #uLongLong (#ptr #{CORBA.ORBitSequence}) (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
     "TODO: setRecordsAttribute"
-    "TODO: getRecordAttribute"
+
+    getRecordAttribute: aRecordId [
+        | sequence |
+        sequence := self getRecordAttribute: aRecordId environment: self environment.
+        ^self environment raiseOrDo: [
+            CORBA.ORBitSequence from: sequence type: ORBitNVPair orb: self orb
+        ]
+    ]
+
+    getRecordAttribute: aRecordId environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_get_record_attribute' returning: #{CORBA.ORBitSequence} args: #(#self #uLongLong (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
     "TODO: copy"
     "TODO: copyWithId"
 

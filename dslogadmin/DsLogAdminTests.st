@@ -96,6 +96,12 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
                      (LogRecord new) info: 'logrecord 2' }.
         self shouldnt: [log writeRecordList: records.] raise: Exception.
         self assert: (log match: 'EXTENDED_TCL' c: '$.info ~= ''logrecord''') = 2.
+        self shouldnt: [
+            log setRecordAttribute: 3 attrList: {
+                (NVPair new) name: 'name1'; value: 5; yourself .
+                (NVPair new) name: 'name2'; value: 10; yourself}
+        ] raise: Exception.
+        self assert: ((log getRecordAttribute: 3) at: 1) value = 5.
         log destroy
     ]
 
