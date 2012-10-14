@@ -1,0 +1,54 @@
+#+TITLE: TODO for gst-corba
+
+* Worked aound
+** TODO Load prereq test dependencies
+
+
+* Missing [0%]
+** TODO `Log>>#setRecordsAttribute:c:attrList:` :M0:
+** TODO `Log>>#copy:` :M0:
+** TODO `Log>>#copyWithId:` :M0:
+
+
+* Not complete
+** Mapping to any [0%]
+*** TODO wchar
+*** TODO enum
+*** TODO float
+*** TODO double
+*** TODO char
+*** TODO octet
+*** TODO any
+*** TODO Principal
+*** TODO Object reference
+*** TODO TypeCode
+*** TODO exception
+*** TODO struct
+*** TODO union
+*** TODO wstring
+*** TODO sequence
+*** TODO array
+*** TODO long double
+*** TODO null
+*** TODO void
+*** TODO fixed
+
+** Exceptions [0%]
+*** TODO Base exceptions
+*** TODO Exceptions attributes not filled-in
+
+
+* Broken [0%]
+** TODO `Log>>#getInterval`
+** TODO `Log>>#getAvailabilityStatus`
+** TODO sequence issue?
+   It looks like if accessing an already created log with
+   LogMgr>>#listLog then using #at: does not correctly bootstrap the
+   object. LogMgr>>#findLog: works.
+
+
+* Misbehaving
+** TODO Memory leaks
+** TODO Exceptions not checked everywhere
+
+#+TODO: TODO IN_PROGRESS DONE

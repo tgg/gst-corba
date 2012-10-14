@@ -70,7 +70,6 @@ TestCase subclass: ORBitTest [
         self assert: ((2 raisedTo: 64) - 1) asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/unsigned_long_long:1.0'.
         self assert: true asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/boolean:1.0'.
         self assert: '' asORBitAny tc value repoId value = 'IDL:omg.org/CORBA/string:1.0'
-        "TODO wchar enum float double char octet any Principal objref TypeCode exception struct union wstring sequence array long_double  null void fixed"
     ]
 
     testAnyToSmalltalk [
