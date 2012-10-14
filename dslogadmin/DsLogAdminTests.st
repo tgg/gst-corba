@@ -94,7 +94,7 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         self assert: ((log query: 'EXTENDED_TCL' c: '' i: (nil asCORBAParameter)) at: 1) info = 'third'.
         records := { (LogRecord new) info: 'logrecord 1' .
                      (LogRecord new) info: 'logrecord 2' }.
-        self shouldnt: [log writeRecordList: records.] raise: Exception.
+        self shouldnt: [log writeRecordList: records] raise: Exception.
         self assert: (log match: 'EXTENDED_TCL' c: '$.info ~= ''logrecord''') = 2.
         self shouldnt: [
             log setRecordAttribute: 3 attrList: {
