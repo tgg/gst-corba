@@ -581,7 +581,16 @@ Log subclass: ORBitLog [
         <cCall: 'DsLogAdmin_Log_set_record_attribute' returning: #void args: #(#self #uLongLong (#ptr #{CORBA.ORBitSequence}) (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 
-    "TODO: setRecordsAttribute"
+    setRecordsAttribute: aString c: aConstraint attrList: aNVList [
+        | orbitSeq |
+        orbitSeq := CORBA.ORBitSequence new: aNVList size type: ORBitNVPair.
+        aNVList asOrderedCollection keysAndValuesDo: [:i :e | orbitSeq bufferAt: i - 1 put: e].
+        ^self setRecordsAttribute: aString c: aConstraint attrList: orbitSeq environment: self environment
+    ]
+
+    setRecordsAttribute: aString c: aConstraint attrList: aNVList environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_set_records_attribute' returning: #uLong args: #(#self #string #string (#ptr #{CORBA.ORBitSequence}) (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
 
     getRecordAttribute: aRecordId [
         | sequence |
