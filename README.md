@@ -52,24 +52,25 @@ minimal subset of the specification using [ORBit][] so that the
   [orbit]: http://projects.gnome.org/ORBit2/
   [telco]: http://www.omg.org/spec/TLOG/1.1.2/PDF
 
-### Implemented already
-
-* `CORBAORB`
-* `CORBAParameter`
-* `CORBAObject`
-* `CORBAEnum`
-* sequence mapping
-* minimal conversion to/from `any`
-
 ### Usability
 
 As of `7f5e3a68d3` the `LogMgr` and `BasicLogFactory` interfaces are
 wrapped.
 
-As of `f6130f3` `Log` can be used to write log records.
+As of `b866e3e951` `BasicLog` interface is wrapped as well.
 
-As of `1285415` you can search log records.
+### Known issues
+* Exceptions are not being propagated consistently in all wrapped
+interfaces
+* Exceptions attributes are not filled in
+* Memory leaks here and there
 
+### Limitations
+
+* Only needed code was written so a lot of base exceptions are missing
+* Likewise, mapping from/to `any` is minimalistic
+* `Log>>#getInterval` is not implemented
+* `Log>>#getAvailabilityStatus` is not implemented
 
 How to use it
 -------------
@@ -85,7 +86,7 @@ Here is an example session:
     st> orb := CORBA.ORBitORB new: 'gst' withArgs: #().
     an ORBitORB
     "assuming you have a running instance of a CORBA Telecom Log Server
-     with the following IOR"
+    with the following IOR"
     st> logmgr := orb stringToObject: 'IOR:010000002b00000049444c3a6f6d672e6f72672f44734c6f6741646d696e2f42617369634c6f67466163746f72793a312e30000001000000000000007c000000010102000a0000003132372e302e302e3100a8b92f00000014010f004e53500000000001000000526f6f74504f4100666163746f72795f504f41000000000001000000010000000002000000000000000800000001000000004f41540100000018000000010000000100010001000000010001050901010000000000'.
     DsLogAdmin.ORBitBasicLogFactory(16r85D9980)
     st> log := logmgr create: 0 maxSize: 0 id: (id := nil asCORBAParameter).
