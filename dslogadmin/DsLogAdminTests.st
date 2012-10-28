@@ -78,12 +78,14 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
         log setForwardingState: on.
         self assert: log getForwardingState = on.
         self assert: log getOperationalState = (CORBAConstants at: '::DsLogAdmin::enabled').
-        " interval := (TimeInterval new) stop: 15; yourself. "
-        " log setInterval: interval. "
-        " self assert: log getInterval = interval!" "Broken for now! "
+        "TODO: broken for now
+         interval := (TimeInterval new) stop: 15; yourself.
+         log setInterval: interval.
+         self assert: log getInterval = interval"
         log setCapacityAlarmThresholds:  #(50 75).
         self assert: log getCapacityAlarmThresholds = #(50 75) asOrderedCollection.
-        "self assert: log getAvailabilityStatus = AvailabilityStatus new" "Broken for now"
+        "TODO: Broken for now
+         self assert: log getAvailabilityStatus = AvailabilityStatus new"
         self shouldnt: [log writeRecords: #('First record' 'second record' 'third')] raise: Exception.
         self shouldnt: [log flush] raise: Exception.
         self assert: (log match: 'EXTENDED_TCL' c: '$.info ~= ''record''') = 2.

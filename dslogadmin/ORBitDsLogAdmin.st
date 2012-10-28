@@ -432,30 +432,12 @@ Log subclass: ORBitLog [
         <cCall: 'DsLogAdmin_Log_get_operational_state' returning: #long args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 
-    getInterval [
-        ^(self getInterval: self environment) asTimeInterval
-    ]
-
-    getInterval: anEnvironment [
-        "TODO: Broken for now because the returned value is not a pointer!"
-        <cCall: 'DsLogAdmin_Log_get_interval' returning: #{ORBitTimeInterval} args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
-    ]
-
     setInterval: aTimeInterval [
         self setInterval: (ORBitTimeInterval value: aTimeInterval) environment: self environment
     ]
 
     setInterval: anORBitTimeInterval environment: anEnvironment [
         <cCall: 'DsLogAdmin_Log_set_interval' returning: #void args: #(#self (#ptr #{ORBitTimeInterval}) (#ptr #{CORBA.ORBitEnvironment}))>
-    ]
-
-    getAvailabilityStatus [
-        "TODO: Broken for now because the returned value is not a pointer!"
-        ^(self getAvailabilityStatus: self environment) asAvailabilityStatus
-    ]
-
-    getAvailabilityStatus: anEnvironment [
-        <cCall: 'DsLogAdmin_Log_get_availability_status' returning: #{ORBitAvailabilityStatus} args: #(#self (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 
     setCapacityAlarmThresholds: aSequence [
