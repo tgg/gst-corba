@@ -604,8 +604,28 @@ Log subclass: ORBitLog [
         <cCall: 'DsLogAdmin_Log_get_record_attribute' returning: #{CORBA.ORBitSequence} args: #(#self #uLongLong (#ptr #{CORBA.ORBitEnvironment}))>
     ]
 
-    "TODO: copy"
-    "TODO: copyWithId"
+    copy: anId [
+        | obj idPtr corbaObject |
+        idPtr := CULongType gcNew.
+        obj := self copy: idPtr environment: self environment.
+        corbaObject := self orb bootstrap: obj with: self environment.
+        anId value: idPtr value.
+        ^corbaObject
+    ]
+
+    copy: anId environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_copy' returning: #{DsLogAdmin.BasicLog} args: #(#self (#ptr #uLong) (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
+
+    copyWithId: anId [
+        | obj |
+        obj := self copyWithId: anId environment: self environment.
+        ^self orb bootstrap: obj with: self environment
+    ]
+
+    copyWithId: anId environment: anEnvironment [
+        <cCall: 'DsLogAdmin_Log_copy_with_id' returning: #{DsLogAdmin.BasicLog} args: #(#self #uLong (#ptr #{CORBA.ORBitEnvironment}))>
+    ]
 
     flush [
         self flush: self environment

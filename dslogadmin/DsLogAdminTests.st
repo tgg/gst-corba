@@ -52,7 +52,7 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
     ]
 
     testLog [
-        | factory log qos halt locked on records |
+        | factory log qos halt locked on records copy |
         factory := self class stringToObject: ior.
         log := factory create: 0 maxSize: 0 id: (nil asCORBAParameter).
         self assert: log myFactory notNil.
@@ -108,6 +108,8 @@ CORBA.ORBitTest subclass: DsLogAdminTest [
                 (NVPair new) name: 'k2'; value: 'v2'; yourself}.
         ] raise: Exception.
         self assert: ((log getRecordAttribute: 4) at: 1) value = 'v1'.
+        self shouldnt: [copy := log copy: (nil asCORBAParameter)] raise: Exception.
+        self shouldnt: [copy := log copyWithId: 10] raise: Exception.
         log destroy
     ]
 
