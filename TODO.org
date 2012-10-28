@@ -2,14 +2,10 @@
 
 * Worked aound
 ** TODO Load prereq test dependencies
-
-
-* Missing [0%]
-** TODO `Log>>#setRecordsAttribute:c:attrList:` :M0:
-** TODO `Log>>#copy:` :M0:
-** TODO `Log>>#copyWithId:` :M0:
-
-
+* Missing [100%]
+** DONE `Log>>#setRecordsAttribute:c:attrList:`                          :M0:
+** DONE `Log>>#copy:`                                                    :M0:
+** DONE `Log>>#copyWithId:`                                              :M0:
 * Not complete
 ** Mapping to any [0%]
 *** TODO wchar
@@ -32,12 +28,9 @@
 *** TODO null
 *** TODO void
 *** TODO fixed
-
 ** Exceptions [0%]
 *** TODO Base exceptions
 *** TODO Exceptions attributes not filled-in
-
-
 * Broken [0%]
 ** TODO `Log>>#getInterval`
 ** TODO `Log>>#getAvailabilityStatus`
@@ -45,8 +38,6 @@
    It looks like if accessing an already created log with
    LogMgr>>#listLog then using #at: does not correctly bootstrap the
    object. LogMgr>>#findLog: works.
-
-
 * Misbehaving
 ** TODO Memory leaks
 ** TODO Exceptions not checked everywhere
