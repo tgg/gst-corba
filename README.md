@@ -19,23 +19,24 @@ How to install it
 For now gst-corba requires git version of [GNU Smalltalk][gst]. See
 [this page][git] for information on how to install git version of gst.
 
-Running gst-corba require installing [ORBit2][orbit] packages, and
-[tao-tls] implementation for tests. Assuming you're using Debian you
-can do this with:
+Running gst-corba require installing [ORBit2][orbit]
+packages. Assuming you're using Debian you can do this with:
 
-    $ sudo apt-get install liborbit2-dev tao-tls
+    $ sudo apt-get install liborbit2-dev
 
-As well as [gst-osprocess] to invoke tao-tls in unit tests:
-
-    $ git clone git://github.com/MrGwen/gst-osprocess
-    $ (cd gst-osprocess && ./package.sh)
-
-Last, clone, setup and run gst-corba:
+Then clone and build gst-corba:
 
     $ git clone git://github.com/tgg/gst-corba.git
     $ cd gst-corba
+    $ make
+
+For tests, you will need [tao-tls] and [gst-osprocess]:
+
+    $ sudo apt-get install tao-tls
+    $ git clone git://github.com/MrGwen/gst-osprocess
+    $ (cd gst-osprocess && ./package.sh)
     $ export LD_LIBRARY_PATH=$PWD/generated # Needed for stub lib
-    $ make                                  # Also runs unit tests
+    $ make check
 
   [git]: http://smalltalk.gnu.org/download/cvs
   [gst-osprocess]: http://github.com/MrGwen/gst-osprocess
